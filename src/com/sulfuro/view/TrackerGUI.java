@@ -27,19 +27,24 @@ public class TrackerGUI extends JFrame{
     {
         super(title);
 
+        //config of the window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(MainPanel);
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
 
-
-        Timer t = new Timer(1000, updateTime);
+        //current time an day
+        Timer t = new Timer(30000, updateTime);//actu every 30s
         t.start();
+
+        //button
+        sendButton.addActionListener(sendButtonAction);
 
 
         this.pack();
     }
     ActionListener updateTime = new ActionListener() {
+        @Override
         public void actionPerformed(ActionEvent e) {
 
             Time time = new Time();
@@ -50,6 +55,22 @@ public class TrackerGUI extends JFrame{
             StringBuilder roundedTime = new StringBuilder();
             roundedTime.append("Let's say : ").append(time.getRoundedTime());
             timeRoundedLabel.setText(roundedTime.toString());
+        }
+    };
+
+    ActionListener sendButtonAction = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(userIdText.getText().isEmpty() || userIdText.getText().equals("User id"))
+            {
+                System.out.println("register an id");
+            }
+            else
+            {
+                System.out.println("J'ai cliké");
+                System.out.println(userIdText.getText());
+
+            }
         }
     };
 
