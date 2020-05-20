@@ -1,15 +1,14 @@
 package com.sulfuro.model;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Locale;
+import java.util.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
-
+/**
+ * Custom class time
+ */
 public class Time {
     private Calendar calendar;
     private int year;
@@ -17,6 +16,10 @@ public class Time {
     private int day;
     private int hour;
     private int minute;
+
+    /**
+     * Time constructor , initialize all value
+     */
     public Time()
     {
         calendar = new GregorianCalendar();
@@ -27,6 +30,10 @@ public class Time {
         minute = calendar.get(Calendar.MINUTE);
     }
 
+    /**
+     * Get the current date
+     * @return string version of the date with (st,nd,rd,th)
+     */
     public String getDate()
     {
         String strMonth = new SimpleDateFormat("MMM", Locale.US).format(month);
@@ -44,61 +51,101 @@ public class Time {
         return str.toString();
 
     }
+
+    /**
+     * Get the current time
+     * @return string of the time
+     * @exemple 10:35
+     */
     public String getTime()
     {
-        return timeToString(hour,minute);
+        return timeToString(calendar);
     }
 
-    public String getRoundedTime()
+    /**
+     * Fully Rounded time to get send to the server
+     * @return array of time [year|month|day|hour|minute]
+     */
+    public ArrayList<Integer> getFullyRoundedTime()
     {
+        ArrayList<Integer> arrayTime = new ArrayList<Integer>();
+        Calendar c = getRoundedTime();
+        arrayTime.add(c.get(Calendar.YEAR));
+        arrayTime.add(c.get(Calendar.MONTH));
+        arrayTime.add(c.get(Calendar.DAY_OF_MONTH));
+        arrayTime.add(c.get(Calendar.HOUR_OF_DAY));
+        arrayTime.add(c.get(Calendar.MINUTE));
+        return arrayTime;
+
+    }
+
+    /**
+     * Calculate the rounded time to 15min into a new Calendar
+     * @return Calendar of the rounded time
+     */
+    public Calendar getRoundedTime()
+    {
+        Calendar c = calendar;
+
         int h = hour;
         int m = minute;
 
         if(m<8)
         {
-            m=0;
+            c.set(Calendar.MINUTE,0);
         }
         if(m>8 && m<23)
         {
-            m=15;
+            c.set(Calendar.MINUTE,15);
         }
         if(m>22 && m<38)
         {
-            m=30;
+            c.set(Calendar.MINUTE,030);
         }
         if(m>37 && m<53)
         {
-            m=45;
+            c.set(Calendar.MINUTE,45);
         }
         if(m>52 && m<60)
         {
             if(h<23)
             {
-                h++;
+                c.add(Calendar.HOUR_OF_DAY,1);
             }
             else
             {
-                h=0;
+                c.set(Calendar.HOUR_OF_DAY,0);
+                c.add(Calendar.DAY_OF_MONTH,1);
+                //!!! day++
             }
 
-            m=0;
+            c.set(Calendar.MINUTE,0);
         }
-        return timeToString(h,m);
-
+        return c;
     }
 
 
-    public String timeToString(int h,int m)
+
+
+    /**
+     * Convert hours and minute to a string but with a calendar
+     * @param c Calendar of the time to be converted to string
+     * @return String hours:minute
+     * @exemple timeToString(calendar) -> 10h05
+     */
+    public String timeToString(Calendar c)
     {
         StringBuilder str = new StringBuilder();
-        if(h<10)
+        if(c.get(Calendar.HOUR_OF_DAY)<10)
             str.append("0");
-
-        str.append(h).append(':');
-        if(m<10)
+        str.append(c.get(Calendar.HOUR_OF_DAY)).append(':');
+        if(c.get(Calendar.MINUTE)<10)
             str.append("0");
-        str.append(m);
+        str.append(c.get(Calendar.MINUTE));
         return str.toString();
+
     }
+
+
 
 }

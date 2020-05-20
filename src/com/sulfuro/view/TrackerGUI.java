@@ -33,12 +33,14 @@ public class TrackerGUI extends JFrame{
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
 
+
         //current time an day
-        Timer t = new Timer(30000, updateTime);//actu every 30s
+        Timer t = new Timer(1000, updateTime);//actu every 1s
         t.start();
 
         //button
         sendButton.addActionListener(sendButtonAction);
+        settingsButton.addActionListener(settingsButtonAction);
 
 
         this.pack();
@@ -52,25 +54,44 @@ public class TrackerGUI extends JFrame{
             currentTimeLabel.setText(time.getTime());
 
 
+
             StringBuilder roundedTime = new StringBuilder();
-            roundedTime.append("Let's say : ").append(time.getRoundedTime());
+            roundedTime.append("Let's say : ").append(time.timeToString(time.getRoundedTime()));
             timeRoundedLabel.setText(roundedTime.toString());
         }
     };
 
+
     ActionListener sendButtonAction = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
+            JOptionPane checkedPane = new JOptionPane();
             if(userIdText.getText().isEmpty() || userIdText.getText().equals("User id"))
             {
-                System.out.println("register an id");
+                checkedPane.showMessageDialog(null, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
             }
             else
             {
-                System.out.println("J'ai cliké");
-                System.out.println(userIdText.getText());
+                //Check if ID exist OR not
+                //SERIALISE AND SEND INFO
+                Time time = new Time();
+                StringBuilder str = new StringBuilder();
+                str.append(userIdText.getText()).append(" Cheked in/out at ").append(time.timeToString(time.getRoundedTime()));
+
+               checkedPane.showMessageDialog(null, str.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
 
             }
+        }
+    };
+
+    ActionListener settingsButtonAction = new ActionListener() {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane settingsWindow = new JOptionPane();
+            String value = settingsWindow.showInputDialog(TrackerGUI.this,"Enter the IP and the port");
+            //TEST CONNECTION
+            //POP UP status of the connection
+            System.out.println(value);
         }
     };
 
