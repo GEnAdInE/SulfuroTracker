@@ -11,13 +11,25 @@ import java.util.GregorianCalendar;
 
 
 public class Time {
-    private Calendar calendar = new GregorianCalendar();
+    private Calendar calendar;
+    private int year;
+    private int month;
+    private int day;
+    private int hour;
+    private int minute;
+    public Time()
+    {
+        calendar = new GregorianCalendar();
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH);
+        day = calendar.get(Calendar.DAY_OF_MONTH);
+        hour = calendar.get(Calendar.HOUR_OF_DAY);
+        minute = calendar.get(Calendar.MINUTE);
+    }
 
     public String getDate()
     {
-        int year = calendar.get(Calendar.YEAR);
-        String month = new SimpleDateFormat("MMM", Locale.US).format(calendar.get(Calendar.MONTH));
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        String strMonth = new SimpleDateFormat("MMM", Locale.US).format(month);
         String prefix;
         switch (day)
         {
@@ -28,30 +40,19 @@ public class Time {
         }
 
         StringBuilder str = new StringBuilder();
-        str.append(month).append(" ").append(day).append(prefix).append(", ").append(year);
+        str.append(strMonth).append(" ").append(day).append(prefix).append(", ").append(year);
         return str.toString();
 
     }
     public String getTime()
     {
-         int h = calendar.get(Calendar.HOUR_OF_DAY);
-
-        int m = calendar.get(Calendar.MINUTE);
-        StringBuilder str = new StringBuilder();
-        if(h<10)
-            str.append("0");
-
-        str.append(h).append(':');
-        if(m<10)
-            str.append("0");
-       str.append(m);
-        return str.toString();
+        return timeToString(hour,minute);
     }
 
     public String getRoundedTime()
     {
-        int h = calendar.get(Calendar.HOUR_OF_DAY);
-        int m = calendar.get(Calendar.MINUTE);
+        int h = hour;
+        int m = minute;
 
         if(m<8)
         {
@@ -82,7 +83,13 @@ public class Time {
 
             m=0;
         }
+        return timeToString(h,m);
 
+    }
+
+
+    public String timeToString(int h,int m)
+    {
         StringBuilder str = new StringBuilder();
         if(h<10)
             str.append("0");
