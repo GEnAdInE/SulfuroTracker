@@ -3,6 +3,8 @@ package com.sulfuro.view;
 import com.sulfuro.Main;
 
 import javax.swing.*;
+
+import com.sulfuro.controller.TrackerClient;
 import com.sulfuro.model.Time;
 
 import java.awt.event.ActionEvent;
@@ -27,72 +29,55 @@ public class TrackerGUI extends JFrame{
     {
         super(title);
 
+
         //config of the window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(MainPanel);
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
-
-
-        //current time an day
-        Timer t = new Timer(1000, updateTime);//actu every 1s
-        t.start();
-
-        //button
-        sendButton.addActionListener(sendButtonAction);
-        settingsButton.addActionListener(settingsButtonAction);
-
-
         this.pack();
+        this.setVisible(true);
     }
-    ActionListener updateTime = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
 
-            Time time = new Time();
-            dayLabel.setText(time.getDate());
-            currentTimeLabel.setText(time.getTime());
+    public JPanel getPanelDay() {
+        return panelDay;
+    }
 
+    public JLabel getDayLabel() {
+        return dayLabel;
+    }
 
+    public JLabel getCurrentTimeLabel() {
+        return currentTimeLabel;
+    }
 
-            StringBuilder roundedTime = new StringBuilder();
-            roundedTime.append("Let's say : ").append(time.timeToString(time.getRoundedTime()));
-            timeRoundedLabel.setText(roundedTime.toString());
-        }
-    };
+    public JLabel getTimeRoundedLabel() {
+        return timeRoundedLabel;
+    }
 
+    public JPanel getTimePanel() {
+        return timePanel;
+    }
 
-    ActionListener sendButtonAction = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JOptionPane checkedPane = new JOptionPane();
-            if(userIdText.getText().isEmpty() || userIdText.getText().equals("User id"))
-            {
-                checkedPane.showMessageDialog(null, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {
-                //Check if ID exist OR not
-                //SERIALISE AND SEND INFO
-                Time time = new Time();
-                StringBuilder str = new StringBuilder();
-                str.append(userIdText.getText()).append(" Cheked in/out at ").append(time.timeToString(time.getRoundedTime()));
+    public JPanel getInputPanel() {
+        return inputPanel;
+    }
 
-               checkedPane.showMessageDialog(null, str.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
+    public JPanel getSettingPanel() {
+        return settingPanel;
+    }
 
-            }
-        }
-    };
+    public JButton getSendButton()
+    {
+        return sendButton;
+    }
 
-    ActionListener settingsButtonAction = new ActionListener() {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JOptionPane settingsWindow = new JOptionPane();
-            String value = settingsWindow.showInputDialog(TrackerGUI.this,"Enter the IP and the port");
-            //TEST CONNECTION
-            //POP UP status of the connection
-            System.out.println(value);
-        }
-    };
+    public JButton getSettingsButton()
+    {
+        return settingsButton;
+    }
 
+    public JTextField getUserIdText() {
+        return userIdText;
+    }
 }
