@@ -20,10 +20,11 @@ public class Main {
         controllerClient.updateView();
 
 
-        JFrame frame2 = new TrackerServGUI("Tracker Server");
+        TrackerServGUI frame2 = new TrackerServGUI("Tracker Server");
         frame2.setVisible(true);
 
-        Thread controllerServ = new Thread(new TrackerServ());
+
+        Thread controllerServ = new Thread(new TrackerServ(frame2));
         controllerServ.start();
 
     }

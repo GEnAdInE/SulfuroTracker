@@ -1,6 +1,7 @@
 package com.sulfuro.controller;
 
 import com.sulfuro.model.CheckInOutDATA;
+import com.sulfuro.view.TrackerServGUI;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -14,8 +15,10 @@ public class TrackerServ implements Runnable{
     private volatile ServerSocket server;
     private volatile Socket socket;
     private volatile boolean running = false;
+    private volatile TrackerServGUI serverGUI;
 
-    public TrackerServ() throws Exception {
+    public TrackerServ(TrackerServGUI GUI) throws Exception {
+        serverGUI = GUI;
         server = new ServerSocket(1700);
         running = true;
     }
@@ -49,14 +52,8 @@ public class TrackerServ implements Runnable{
                 e.printStackTrace();
             }
 
-            int id = received.getId();
-            int year = received.getTime().get(Calendar.YEAR);
-            int month = received.getTime().get(Calendar.MONTH) + 1;
-            int day = received.getTime().get(Calendar.DAY_OF_MONTH);
-            int hour = received.getTime().get(Calendar.HOUR_OF_DAY);
-            int minute = received.getTime().get(Calendar.MINUTE);
+            serverGUI.TrackerInputAddData(received);
 
-            System.out.printf("Checked %d at %d-%02d-%02d %02d:%02d \n", id, year, month, day, hour, minute);
         }
     }
 }
