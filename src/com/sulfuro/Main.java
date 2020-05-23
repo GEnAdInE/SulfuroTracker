@@ -21,9 +21,10 @@ public class Main {
 
 
         JFrame frame2 = new TrackerServGUI("Tracker Server");
-        TrackerServ controllerServ = new TrackerServ();
-        controllerServ.StartServer();
         frame2.setVisible(true);
+
+        Thread controllerServ = new Thread(new TrackerServ());
+        controllerServ.start();
 
     }
 }
