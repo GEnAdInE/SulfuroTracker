@@ -1,6 +1,7 @@
 package com.sulfuro;
 
 import com.sulfuro.controller.TrackerClient;
+import com.sulfuro.controller.TrackerServ;
 import com.sulfuro.view.TrackerGUI;
 import com.sulfuro.view.TrackerServGUI;
 
@@ -9,7 +10,7 @@ import java.nio.channels.spi.AbstractSelectionKey;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
 	// write your code here
 
 
@@ -20,6 +21,8 @@ public class Main {
 
 
         JFrame frame2 = new TrackerServGUI("Tracker Server");
+        TrackerServ controllerServ = new TrackerServ();
+        controllerServ.StartServer();
         frame2.setVisible(true);
 
     }
