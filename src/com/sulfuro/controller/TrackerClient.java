@@ -21,6 +21,10 @@ public class TrackerClient {
     private int port;
 
 
+    /**
+     * Constructor of the controller for the view
+     * @param v take the view as argument to set the value
+     */
     public TrackerClient(TrackerGUI v) {
         view = v;
         ip = null;
@@ -28,6 +32,9 @@ public class TrackerClient {
     }
 
 
+    /**
+     * update the view (time)
+     */
     public void updateView() {
 
 
@@ -41,7 +48,12 @@ public class TrackerClient {
     }
 
 
+
     ActionListener updateTime = new ActionListener() {
+        /**
+         * update all the time and date of the GUI
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
 
@@ -58,6 +70,10 @@ public class TrackerClient {
 
 
     ActionListener sendButtonAction = new ActionListener() {
+        /**
+         * Create the data to be send and call the Send function
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane checkedPane = new JOptionPane();
@@ -88,6 +104,10 @@ public class TrackerClient {
     };
 
     ActionListener settingsButtonAction = new ActionListener() {
+        /**
+         * Edit the settings to connect to the server
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane settingsWindow = new JOptionPane();
@@ -110,6 +130,11 @@ public class TrackerClient {
     };
 
 
+    /**
+     * Function to send the data to the server
+     * @param data
+     * @return true if it has been send and false if not
+     */
     public boolean SendData(CheckInOutDATA data) {
         try {
             if (ip != null && port != 0) {

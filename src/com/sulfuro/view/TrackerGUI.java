@@ -1,14 +1,6 @@
 package com.sulfuro.view;
 
-import com.sulfuro.Main;
-
 import javax.swing.*;
-
-import com.sulfuro.controller.TrackerClient;
-import com.sulfuro.model.Time;
-
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 public class TrackerGUI extends JFrame{
     private JPanel MainPanel;
