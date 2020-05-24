@@ -6,14 +6,13 @@ import com.sulfuro.view.TrackerServGUI;
 public class MainServer {
 
     public static void main(String[] args) throws Exception {
-	// write your code here
 
-        TrackerServGUI frame2 = new TrackerServGUI("Tracker Server");
-        frame2.setVisible(true);
+        TrackerServGUI server = new TrackerServGUI("Tracker Server");
+        server.setVisible(true);
 
 
-        Thread controllerServ = new Thread(new TrackerServ(frame2));
-        controllerServ.start();
+        Thread receptionThread = new Thread(new TrackerServ(server));
+        receptionThread.start();
 
     }
 }

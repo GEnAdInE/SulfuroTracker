@@ -1,11 +1,13 @@
 package com.sulfuro.view;
 
 import com.sulfuro.model.CheckInOutDATA;
+import com.sulfuro.model.CheckInOutDATATable;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.util.Calendar;
+import java.util.List;
 
 public class TrackerServGUI extends JFrame {
     private JTabbedPane Tabs;
@@ -26,13 +28,11 @@ public class TrackerServGUI extends JFrame {
         this.setSize(1000, 500);
     }
     public void TrackerInputsInit(){
-        String[] columnNames = { "ID", "Name", "Last Entry" };
-        String[][] data = TrackerInputGetData();
+        DefaultTableModel tableModel = new DefaultTableModel();
+        tableModel.addColumn("ID");
+        tableModel.addColumn("NOM-PRENOM");
+        tableModel.addColumn("HEURE");
 
-        //CREATE TABLE
-        //TrackerInputs=new JTable(data,columnNames);
-
-        TableModel tableModel = new DefaultTableModel(0, 3);
         TrackerInputs=new JTable(tableModel);
 
         //INSERT IT INSIDE PANEL
@@ -40,14 +40,14 @@ public class TrackerServGUI extends JFrame {
         TrackerInputs.setFillsViewportHeight(true);
         this.Tabs.setComponentAt(0, scrollPane);
     }
-    public String[][] TrackerInputGetData(){
-        //GET DATA FROM FILE
-        String[][] data = {
-                { "4031", "Kundan Kumar Jha", "20h30" },
-                { "6014", "Anand Jha", "19h30" }
-        };
-        return data;
+
+    public void TrackerInputSetDBData(CheckInOutDATATable dataTable){
+        List<CheckInOutDATA> dataList = dataTable.getTable();
+        for (CheckInOutDATA data: dataList){
+            TrackerInputAddData(data);
+        }
     }
+
     public void TrackerInputAddData(CheckInOutDATA received){
         
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
@@ -65,5 +65,4 @@ public class TrackerServGUI extends JFrame {
         model.addRow(new Object[]{idData, "Test", timeData});
 
     }
-
 }
