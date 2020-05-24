@@ -2,6 +2,7 @@ package com.sulfuro.controller;
 
 import com.sulfuro.model.CheckInOutDATA;
 import com.sulfuro.model.CheckInOutDATATable;
+import com.sulfuro.model.IOmanager;
 import com.sulfuro.view.TrackerServGUI;
 
 import java.io.*;
@@ -22,7 +23,7 @@ public class TrackerServ implements Runnable{
         server = new ServerSocket(1700);
         filename = "InOutServerDB.ser";
 
-        CheckInOutDATATable data = getDataFromFile();
+        CheckInOutDATATable data = IOmanager.getDataFromFile(filename);
 
         serverGUI.TrackerInputSetDBData(data);
 
@@ -60,62 +61,8 @@ public class TrackerServ implements Runnable{
             }
 
 
-            writeDataToFile(received);
+            IOmanager.writeDataToFile(filename,received);
             serverGUI.TrackerInputAddData(received);
-        }
-    }
-
-    public CheckInOutDATATable getDataFromFile()
-    {
-        try
-        {
-            // Reading the object from a file
-            FileInputStream fileStream = new FileInputStream(filename);
-            ObjectInputStream objStream = new ObjectInputStream(fileStream);
-
-            CheckInOutDATATable InOutDB = null;
-
-            InOutDB = (CheckInOutDATATable) objStream.readObject();
-
-            objStream.close();
-            fileStream.close();
-
-            System.out.println("GOT DATA");
-            return InOutDB;
-
-        }
-
-        catch(IOException ex)
-        {
-            System.out.println("IOException is caught");
-        }
-
-        catch(ClassNotFoundException ex)
-        {
-            System.out.println("ClassNotFoundException is caught");
-        }
-
-        return new CheckInOutDATATable();
-    }
-    public void writeDataToFile (CheckInOutDATA data){
-        CheckInOutDATATable dataTable = getDataFromFile();
-        dataTable.add(data);
-
-        try
-        {
-            FileOutputStream file = new FileOutputStream(filename);
-            ObjectOutputStream out = new ObjectOutputStream(file);
-
-            out.writeObject(dataTable);
-
-            out.close();
-            file.close();
-            System.out.println("WROTE");
-        }
-
-        catch(IOException ex)
-        {
-            System.out.println("IOException is caught");
         }
     }
 }

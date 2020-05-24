@@ -69,7 +69,7 @@
             </constraints>
             <properties>
               <horizontalAlignment value="0"/>
-              <text value="User id"/>
+              <text value=""/>
             </properties>
           </component>
           <component id="15a07" class="javax.swing.JButton" binding="sendButton">

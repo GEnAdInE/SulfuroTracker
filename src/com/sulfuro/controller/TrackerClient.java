@@ -1,14 +1,17 @@
 package com.sulfuro.controller;
 
 import com.sulfuro.model.CheckInOutDATA;
+import com.sulfuro.model.CheckInOutDATATable;
+import com.sulfuro.model.IOmanager;
 import com.sulfuro.model.Time;
 import com.sulfuro.view.TrackerGUI;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URI;
@@ -19,16 +22,21 @@ public class TrackerClient {
     private TrackerGUI view;
     private String ip;
     private int port;
+    Socket socket;
+    private volatile String filename;
+    private CheckInOutDATATable buffer;
 
 
     /**
      * Constructor of the controller for the view
+     * Initialised with the default IP:PORT configuration
      * @param v take the view as argument to set the value
      */
-    public TrackerClient(TrackerGUI v) {
+    public TrackerClient(TrackerGUI v) throws Exception {
         view = v;
         ip = null;
         port = 0;
+        filename = "InOutClientDB.ser";
     }
 
 
@@ -37,17 +45,21 @@ public class TrackerClient {
      */
     public void updateView() {
 
-
         Timer t = new Timer(1000, updateTime);//actu every 1s
         t.start();
 
         view.getSendButton().addActionListener(sendButtonAction);
         view.getSettingsButton().addActionListener(settingsButtonAction);
 
+        view.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+
+                super.windowClosing(e);
+            }
+        });
 
     }
-
-
 
     ActionListener updateTime = new ActionListener() {
         /**
@@ -77,13 +89,9 @@ public class TrackerClient {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane checkedPane = new JOptionPane();
-            if (view.getUserIdText().getText().isEmpty() || view.getUserIdText().getText().equals("User id")) {
+            if (view.getUserIdText().getText().isEmpty() || view.getUserIdText().getText().equals("")) {
                 checkedPane.showMessageDialog(view, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
-                //Check if ID exist OR not maybe not my problem :/
-
-
-                //SERIALISE AND SEND INFO
                 Time time = new Time();
                 int Id = Integer.parseInt(view.getUserIdText().getText());
 
@@ -91,13 +99,13 @@ public class TrackerClient {
                 StringBuilder str = new StringBuilder();
                 if(SendData(data))
                 {
-
                     str.append(Id).append(" Cheked in/out at ").append(time.timeToString(data.getTime()));
                     checkedPane.showMessageDialog(view, str.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
                 }
                 else
                 {
-                    checkedPane.showMessageDialog(view, "Impossible to connect", "Error", JOptionPane.ERROR_MESSAGE);
+                    IOmanager.writeDataToFile(filename,data);
+                    checkedPane.showMessageDialog(view, "Impossible to connect , but your check in/out has been saved :)", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -112,19 +120,54 @@ public class TrackerClient {
         public void actionPerformed(ActionEvent e) {
             JOptionPane settingsWindow = new JOptionPane();
             String value = settingsWindow.showInputDialog(view, "Enter the IP and the port");
-            //TEST CONNECTION
-            //POP UP status of the connection
 
             try {
                 URI uri = new URI("my://" + value);
                 ip = uri.getHost();
                 port = uri.getPort();
+                //tester la connection
+                //POP UP status of the connection
+                //si ca marche envoyer les donnés stocker dans le fichier
+                buffer = IOmanager.getDataFromFile(filename);
+
+                Boolean sended = true;
+                int i =0;
+                while(buffer.getTable().size() > 0)
+                {
+                    if(SendData(buffer.getTable().get(i)))
+                    {
+                        buffer.getTable().remove(i);
+                    }
+                    else
+                    {
+                        sended = false;
+                        break;
+                    }
+
+                }
+
+                //IO ERROR quand on ferme le pop up
+                if(sended = true && buffer.getTable().isEmpty())
+                {
+                  File f = new File(filename);
+                  if(f.delete())
+                  {
+                      System.out.println("deleted");
+                  }
+                  else
+                  {
+                      System.out.println("not deleted");
+                  }
+                }
+
+
+
 
             } catch (URISyntaxException ex) {
                 JOptionPane errorPane = new JOptionPane();
                 errorPane.showMessageDialog(settingsWindow, "Please put a valid Host and Port", "Settings Error", JOptionPane.ERROR_MESSAGE);
 
-            }
+            }//catch socket error en plus
 
         }
     };
@@ -138,7 +181,7 @@ public class TrackerClient {
     public boolean SendData(CheckInOutDATA data) {
         try {
             if (ip != null && port != 0) {
-                Socket socket = new Socket(ip, port);
+                socket = new Socket(ip,port);
                 ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
                 outputStream.writeObject(data);
                 socket.close();

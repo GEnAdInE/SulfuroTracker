@@ -1,6 +1,9 @@
 package com.sulfuro.view;
 
+import com.sulfuro.model.JTextFieldHintUI;
+
 import javax.swing.*;
+import java.awt.*;
 
 public class TrackerGUI extends JFrame{
     private JPanel MainPanel;
@@ -25,6 +28,7 @@ public class TrackerGUI extends JFrame{
         //config of the window
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(MainPanel);
+        userIdText.setUI(new JTextFieldHintUI("User ID", Color.gray));
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
         this.pack();
