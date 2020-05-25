@@ -87,40 +87,9 @@ public class Time {
     {
         Calendar c = calendar;
 
-        int h = hour;
-        int m = minute;
+        int mod = minute % 15;
+        c.add(Calendar.MINUTE,mod < 8 ? -mod : (15-mod));
 
-        if(m<8)
-        {
-            c.set(Calendar.MINUTE,0);
-        }
-        if(m>8 && m<23)
-        {
-            c.set(Calendar.MINUTE,15);
-        }
-        if(m>22 && m<38)
-        {
-            c.set(Calendar.MINUTE,030);
-        }
-        if(m>37 && m<53)
-        {
-            c.set(Calendar.MINUTE,45);
-        }
-        if(m>52 && m<60)
-        {
-            if(h<23)
-            {
-                c.add(Calendar.HOUR_OF_DAY,1);
-            }
-            else
-            {
-                c.set(Calendar.HOUR_OF_DAY,0);
-                c.add(Calendar.DAY_OF_MONTH,1);
-                //!!! day++
-            }
-
-            c.set(Calendar.MINUTE,0);
-        }
         return c;
     }
 
