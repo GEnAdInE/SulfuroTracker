@@ -62,7 +62,7 @@ public class TrackerServ implements Runnable{
 
 
             IOmanager.writeDataToFile(filename,received);
-            serverGUI.TrackerInputAddData(received);
+            serverGUI.TrackerInputInsertData(received);
         }
     }
 }

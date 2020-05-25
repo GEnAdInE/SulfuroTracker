@@ -2,7 +2,6 @@ package com.sulfuro.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 public class CheckInOutDATATable implements Serializable {
@@ -14,12 +13,12 @@ public class CheckInOutDATATable implements Serializable {
     }
 
     public CheckInOutDATATable(CheckInOutDATA data) {
-        dataTable.add(data);
+        dataTable.add(0, data);
     }
 
     public void add(CheckInOutDATA data)
     {
-        dataTable.add(data);
+        dataTable.add(0, data);
     }
     public List<CheckInOutDATA> getTable(){
         return dataTable;

@@ -48,8 +48,25 @@ public class TrackerServGUI extends JFrame {
         }
     }
 
-    public void TrackerInputAddData(CheckInOutDATA received){
+    public void TrackerInputInsertData(CheckInOutDATA received){
         
+        DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
+
+        int id = received.getId();
+        int year = received.getTime().get(Calendar.YEAR);
+        int month = received.getTime().get(Calendar.MONTH) + 1;
+        int day = received.getTime().get(Calendar.DAY_OF_MONTH);
+        int hour = received.getTime().get(Calendar.HOUR_OF_DAY);
+        int minute = received.getTime().get(Calendar.MINUTE);
+
+        String idData = Integer.toString(id);
+        String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
+
+        model.insertRow(0, new Object[]{idData, "Test", timeData});
+
+    }
+    public void TrackerInputAddData(CheckInOutDATA received){
+
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
 
         int id = received.getId();

@@ -12,7 +12,7 @@ public class IOmanager {
             FileInputStream fileStream = new FileInputStream(filename);
             ObjectInputStream objStream = new ObjectInputStream(fileStream);
 
-            CheckInOutDATATable InOutDB = (CheckInOutDATATable) objStream.readObject();;
+            CheckInOutDATATable InOutDB = (CheckInOutDATATable)objStream.readObject();;
             objStream.close();
             fileStream.close();
 
@@ -37,16 +37,13 @@ public class IOmanager {
     public static void writeDataToFile(String filename, CheckInOutDATA data){
 
 
-        CheckInOutDATATable dataTable = new CheckInOutDATATable();
-        File f = new File(filename);
-        if(f.exists())
-        {
-            dataTable = IOmanager.getDataFromFile(filename);
-            dataTable.add(data);
-        }
+        CheckInOutDATATable dataTable;
 
         try
         {
+            dataTable = IOmanager.getDataFromFile(filename);
+            dataTable.add(data);
+
             FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
 
