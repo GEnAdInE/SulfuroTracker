@@ -7,9 +7,11 @@ import java.util.List;
 
 public class CheckInOutDATATable implements Serializable {
 
-    private List<CheckInOutDATA> dataTable = new ArrayList<>();
+    private List<CheckInOutDATA> dataTable;
 
-    public CheckInOutDATATable() {}
+    public CheckInOutDATATable() {
+        dataTable = new ArrayList<>();
+    }
 
     public CheckInOutDATATable(CheckInOutDATA data) {
         dataTable.add(data);

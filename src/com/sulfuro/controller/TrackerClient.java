@@ -9,9 +9,8 @@ import com.sulfuro.view.TrackerGUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URI;
@@ -19,12 +18,11 @@ import java.net.URISyntaxException;
 
 public class TrackerClient {
 
-    private TrackerGUI view;
+    private final TrackerGUI view;
     private String ip;
     private int port;
     Socket socket;
-    private volatile String filename;
-    private CheckInOutDATATable buffer;
+    private final String filename;
 
 
     /**
@@ -51,20 +49,13 @@ public class TrackerClient {
         view.getSendButton().addActionListener(sendButtonAction);
         view.getSettingsButton().addActionListener(settingsButtonAction);
 
-        view.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-
-                super.windowClosing(e);
-            }
-        });
 
     }
 
     ActionListener updateTime = new ActionListener() {
         /**
          * update all the time and date of the GUI
-         * @param e
+         * @param e event
          */
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -84,13 +75,13 @@ public class TrackerClient {
     ActionListener sendButtonAction = new ActionListener() {
         /**
          * Create the data to be send and call the Send function
-         * @param e
+         * @param e eveny
          */
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane checkedPane = new JOptionPane();
             if (view.getUserIdText().getText().isEmpty() || view.getUserIdText().getText().equals("")) {
-                checkedPane.showMessageDialog(view, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 Time time = new Time();
                 int Id = Integer.parseInt(view.getUserIdText().getText());
@@ -100,12 +91,13 @@ public class TrackerClient {
                 if(SendData(data))
                 {
                     str.append(Id).append(" Cheked in/out at ").append(time.timeToString(data.getTime()));
-                    checkedPane.showMessageDialog(view, str.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
+                    JOptionPane.showMessageDialog(view, str.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
                 }
                 else
                 {
+
                     IOmanager.writeDataToFile(filename,data);
-                    checkedPane.showMessageDialog(view, "Impossible to connect , but your check in/out has been saved :)", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(view, "Impossible to connect , but your check in/out has been saved :)", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -114,12 +106,12 @@ public class TrackerClient {
     ActionListener settingsButtonAction = new ActionListener() {
         /**
          * Edit the settings to connect to the server
-         * @param e
+         * @param e event
          */
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane settingsWindow = new JOptionPane();
-            String value = settingsWindow.showInputDialog(view, "Enter the IP and the port");
+            String value = JOptionPane.showInputDialog(view, "Enter the IP and the port");
 
             try {
                 URI uri = new URI("my://" + value);
@@ -128,54 +120,48 @@ public class TrackerClient {
                 //tester la connection
                 //POP UP status of the connection
                 //si ca marche envoyer les donnés stocker dans le fichier
-                buffer = IOmanager.getDataFromFile(filename);
-
-                Boolean sended = true;
-                int i =0;
-                while(buffer.getTable().size() > 0)
+                File f = new File(filename);
+                if(f.exists())
                 {
-                    if(SendData(buffer.getTable().get(i)))
+                    CheckInOutDATATable buffer = IOmanager.getDataFromFile(filename);
+                    boolean sended = true;
+                    int i =0;
+                    while(buffer.getTable().size() > 0)
                     {
-                        buffer.getTable().remove(i);
+                        if(SendData(buffer.getTable().get(i)))
+                        {
+                            buffer.getTable().remove(i);
+                        }
+                        else
+                        {
+                            sended = false;
+                            break;
+                        }
                     }
-                    else
+
+                    if(sended && buffer.getTable().isEmpty())
                     {
-                        sended = false;
-                        break;
+                        if(f.delete())
+                        {
+                            JOptionPane.showMessageDialog(settingsWindow, "All saved data has been sent", "Data sended", JOptionPane.INFORMATION_MESSAGE);
+                        }
+                        else
+                        {
+                            JOptionPane.showMessageDialog(settingsWindow, "All saved data has been sent but we can't delete the backup file , contact the support", "Data sended", JOptionPane.INFORMATION_MESSAGE);
+                        }
                     }
-
                 }
-
-                //IO ERROR quand on ferme le pop up
-                if(sended = true && buffer.getTable().isEmpty())
-                {
-                  File f = new File(filename);
-                  if(f.delete())
-                  {
-                      System.out.println("deleted");
-                  }
-                  else
-                  {
-                      System.out.println("not deleted");
-                  }
-                }
-
-
-
-
             } catch (URISyntaxException ex) {
                 JOptionPane errorPane = new JOptionPane();
-                errorPane.showMessageDialog(settingsWindow, "Please put a valid Host and Port", "Settings Error", JOptionPane.ERROR_MESSAGE);
-
-            }//catch socket error en plus
-
+                JOptionPane.showMessageDialog(settingsWindow, "Please put a valid Host and Port", "Settings Error", JOptionPane.ERROR_MESSAGE);
+            }
         }
     };
 
 
     /**
      * Function to send the data to the server
-     * @param data
+     * @param data data to be send
      * @return true if it has been send and false if not
      */
     public boolean SendData(CheckInOutDATA data) {
@@ -188,12 +174,12 @@ public class TrackerClient {
             }
             else {
                 JOptionPane errorPane = new JOptionPane();
-                errorPane.showMessageDialog(view, "Please check your settings", "Error in settings", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(view, "Please check your settings", "Error in settings", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } catch (Exception ex) {
             JOptionPane errorPane = new JOptionPane();
-            errorPane.showMessageDialog(view, ex, "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(view, ex, "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }
         return true;
