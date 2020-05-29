@@ -51,7 +51,62 @@ public class IOmanager {
 
             out.close();
             file.close();
-            System.out.println("WROTE");
+            System.out.println("WROTE D");
+        }
+
+        catch(IOException ex)
+        {
+            System.out.println("Writing IOException is caught");
+        }
+    }
+    public static Company getCompanyFromFile(String filename)
+    {
+        try
+        {
+            // Reading the object from a file
+            FileInputStream fileStream = new FileInputStream(filename);
+            ObjectInputStream objStream = new ObjectInputStream(fileStream);
+
+            Company CompanyDB = (Company) objStream.readObject();;
+            objStream.close();
+            fileStream.close();
+
+            System.out.println("GOT COMPANY");
+            return CompanyDB;
+
+        }
+
+        catch(IOException ex)
+        {
+            System.out.println("Getting IOException is caught");
+        }
+
+        catch(ClassNotFoundException ex)
+        {
+            System.out.println("ClassNotFoundException is caught");
+        }
+
+        return new Company();
+    }
+
+    public static void writeCompanyToFile(String filename, Employee employee){
+
+
+        Company companyTable;
+
+        try
+        {
+            companyTable = IOmanager.getCompanyFromFile(filename);
+            companyTable.add(employee);
+
+            FileOutputStream file = new FileOutputStream(filename);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+
+            out.writeObject(companyTable);
+
+            out.close();
+            file.close();
+            System.out.println("WROTE C");
         }
 
         catch(IOException ex)

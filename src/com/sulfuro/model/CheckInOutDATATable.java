@@ -15,6 +15,9 @@ public class CheckInOutDATATable implements Serializable {
     public CheckInOutDATATable(CheckInOutDATA data) {
         dataTable.add(0, data);
     }
+    public CheckInOutDATATable(CheckInOutDATATable dataTable) {
+        this.dataTable = dataTable.getTable();
+    }
 
     public void add(CheckInOutDATA data)
     {
