@@ -18,6 +18,8 @@ public class TrackerServGUI extends JFrame {
     private JTabbedPane Tabs;
     private JTabbedPane EmployeeTabs;
     private JPanel MainPanel;
+    private JTextField textPort;
+    private JButton validateButton;
     private JTable TrackerInputs;
     private JTable TrackerEmployees;
 
@@ -28,9 +30,13 @@ public class TrackerServGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(MainPanel);
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        textPort.setUI(new JTextFieldHintUI("Port", Color.gray));
 
         this.setSize(1000, 500);
     }
+    public JTextField getTextPort() {return textPort;}
+    public JButton getValidateButton() {return validateButton;}
+
     public JPanel getMainPanel() {
         return MainPanel;
     }
@@ -48,19 +54,5 @@ public class TrackerServGUI extends JFrame {
         return TrackerEmployees;
     }
 
-/*
-    ActionListener validateButtonAction = new ActionListener() {
 
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            JOptionPane checkedPane = new JOptionPane();
-            if (portfield.getText().isEmpty() || portfield.getText().equals("")) {
-                JOptionPane.showMessageDialog(this, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
-            } else {
-                Time time = new Time();
-                 = Integer.parseInt(portfield.getText());
-            }
-
-        }
-    }*/
 }
