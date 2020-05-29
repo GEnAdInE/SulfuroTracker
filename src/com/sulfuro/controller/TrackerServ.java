@@ -200,7 +200,8 @@ public class TrackerServ implements Runnable{
                     port = Integer.parseInt(serverGUI.getTextPort().getText());
                     terminate();
                     server = new ServerSocket(port);
-                    run();
+                    Thread receptionThread = new Thread(String.valueOf(this));
+                    receptionThread.start();
                     JOptionPane.showMessageDialog(serverGUI, "Port have been changed ", "Information", JOptionPane.INFORMATION_MESSAGE);
 
                 } catch (NumberFormatException | IOException nfe) {
