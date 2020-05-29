@@ -46,7 +46,9 @@ public class TrackerServ implements Runnable{
         running = true;
     }
     public void stop() throws  Exception{
-        socket.close();
+        if(socket.isConnected()){
+            socket.close();
+        }
         running = false;
     }
     public void run()
