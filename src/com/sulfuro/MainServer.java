@@ -14,7 +14,5 @@ public class MainServer {
         TrackerServ server = new TrackerServ(serverGUI);
         Thread receptionThread = new Thread(server);
         receptionThread.start();
-        server.terminate();
-
     }
 }
