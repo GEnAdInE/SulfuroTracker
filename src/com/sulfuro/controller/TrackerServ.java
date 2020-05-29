@@ -15,6 +15,7 @@ import java.util.List;
 public class TrackerServ implements Runnable{
 
     private volatile ServerSocket server;
+    private volatile int port;
     private volatile Socket socket;
     private volatile boolean running = false;
     private volatile TrackerServGUI serverGUI;
@@ -24,13 +25,19 @@ public class TrackerServ implements Runnable{
     private volatile String CompanyFilename;
 
     public TrackerServ(TrackerServGUI GUI) throws Exception {
+        port = 1700;
         serverGUI = GUI;
+<<<<<<< HEAD
         TrackerInputs = serverGUI.getTrackerInputs();
         TrackerEmployees = serverGUI.getTrackerEmployees();
 
         server = new ServerSocket(1700);
         InputsFilename = "InOutServerDB.ser";
         CompanyFilename = "CompanyServerDB.ser";
+=======
+        server = new ServerSocket(port);
+        filename = "InOutServerDB.ser";
+>>>>>>> 2a7df120228e5ffe775e022eb226b5cc700ac593
 
         CheckInOutDATATable data = IOmanager.getDataFromFile(InputsFilename);
         Company company = IOmanager.getCompanyFromFile(CompanyFilename);
