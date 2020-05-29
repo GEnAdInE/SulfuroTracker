@@ -5,6 +5,8 @@ import com.sulfuro.view.TrackerServGUI;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -30,7 +32,7 @@ public class TrackerServ implements Runnable{
         TrackerInputs = serverGUI.getTrackerInputs();
         TrackerEmployees = serverGUI.getTrackerEmployees();
 
-        server = new ServerSocket(1700);
+        server = new ServerSocket(port);
         InputsFilename = "InOutServerDB.ser";
         CompanyFilename = "CompanyServerDB.ser";
 
@@ -43,6 +45,9 @@ public class TrackerServ implements Runnable{
         //TrackerEmployeeSetDBData(company);
         TrackerInputSetDBData(data);
 
+
+        //adding listener
+        serverGUI.getValidateButton().addActionListener(valideButtonAction);
         running = true;
     }
     public void stop() throws  Exception{
@@ -71,9 +76,7 @@ public class TrackerServ implements Runnable{
             CheckInOutDATA received = null;
             try {
                 received = (CheckInOutDATA)inputStream.readObject();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
@@ -187,5 +190,31 @@ public class TrackerServ implements Runnable{
 
         }
     }
+
+    final ActionListener valideButtonAction = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if (!serverGUI.getTextPort().getText().isEmpty()) {
+                try {
+                    port = Integer.parseInt(serverGUI.getTextPort().getText());
+                    stop(); //erreur
+                    server = new ServerSocket(port);
+                    run();
+                    JOptionPane.showMessageDialog(serverGUI, "Port have been changed ", "Information", JOptionPane.INFORMATION_MESSAGE);
+
+                } catch (NumberFormatException | IOException nfe) {
+                    JOptionPane.showMessageDialog(serverGUI, "Please put a number ", "Error", JOptionPane.ERROR_MESSAGE);
+
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            } else {
+                JOptionPane.showMessageDialog(serverGUI, "Can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+
+            }
+
+        }
+    };
 
 }

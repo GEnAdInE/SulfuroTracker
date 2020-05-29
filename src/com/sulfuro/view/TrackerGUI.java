@@ -31,7 +31,9 @@ public class TrackerGUI extends JFrame{
         userIdText.setUI(new JTextFieldHintUI("User ID", Color.gray));
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
 
-        this.pack();
+
+        this.setSize(400, 150);
+
         this.setVisible(true);
     }
 

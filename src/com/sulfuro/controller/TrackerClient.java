@@ -35,6 +35,12 @@ public class TrackerClient {
         ip = null;
         port = 0;
         filename = "InOutClientDB.ser";
+
+        view.getSendButton().addActionListener(sendButtonAction);
+        view.getSettingsButton().addActionListener(settingsButtonAction);
+
+
+
     }
 
 
@@ -45,10 +51,6 @@ public class TrackerClient {
 
         Timer t = new Timer(1000, updateTime);//actu every 1s
         t.start();
-
-        view.getSendButton().addActionListener(sendButtonAction);
-        view.getSettingsButton().addActionListener(settingsButtonAction);
-
 
     }
 
@@ -79,12 +81,22 @@ public class TrackerClient {
          */
         @Override
         public void actionPerformed(ActionEvent e) {
-            JOptionPane checkedPane = new JOptionPane();
             if (view.getUserIdText().getText().isEmpty() || view.getUserIdText().getText().equals("")) {
                 JOptionPane.showMessageDialog(view, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
             } else {
                 Time time = new Time();
-                int Id = Integer.parseInt(view.getUserIdText().getText());
+                int Id =0;
+                try
+                {
+                    Id = Integer.parseInt(view.getUserIdText().getText());
+
+                }
+                 catch (NumberFormatException nfe)
+                {
+                    JOptionPane.showMessageDialog(view, "Please put a number ", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+
+                }
 
                 CheckInOutDATA data = new CheckInOutDATA(time.getRoundedTime(), Id);
                 StringBuilder str = new StringBuilder();
