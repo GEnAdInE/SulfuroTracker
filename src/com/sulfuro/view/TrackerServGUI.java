@@ -52,8 +52,6 @@ public class TrackerServGUI extends JFrame {
         return TrackerEmployees;
     }
 
-<<<<<<< HEAD
-=======
 /*
     ActionListener validateButtonAction = new ActionListener() {
 
@@ -69,5 +67,4 @@ public class TrackerServGUI extends JFrame {
 
         }
     }*/
->>>>>>> 2a7df120228e5ffe775e022eb226b5cc700ac593
 }
