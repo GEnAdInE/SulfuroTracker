@@ -198,7 +198,7 @@ public class TrackerServ implements Runnable{
             if (!serverGUI.getTextPort().getText().isEmpty()) {
                 try {
                     port = Integer.parseInt(serverGUI.getTextPort().getText());
-                    //stop(); //erreur
+                    terminate();
                     server = new ServerSocket(port);
                     run();
                     JOptionPane.showMessageDialog(serverGUI, "Port have been changed ", "Information", JOptionPane.INFORMATION_MESSAGE);
