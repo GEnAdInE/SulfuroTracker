@@ -18,8 +18,6 @@ public class TrackerServGUI extends JFrame {
     private JTabbedPane Tabs;
     private JTabbedPane EmployeeTabs;
     private JPanel MainPanel;
-    private JTextField portfield;
-    private JButton validateButton;
     private JTable TrackerInputs;
     private JTable TrackerEmployees;
 
@@ -30,8 +28,6 @@ public class TrackerServGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(MainPanel);
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
-        portfield.setUI(new JTextFieldHintUI("Port", Color.gray));
-
 
         this.setSize(1000, 500);
     }
@@ -52,8 +48,6 @@ public class TrackerServGUI extends JFrame {
         return TrackerEmployees;
     }
 
-<<<<<<< HEAD
-=======
 /*
     ActionListener validateButtonAction = new ActionListener() {
 
@@ -69,5 +63,4 @@ public class TrackerServGUI extends JFrame {
 
         }
     }*/
->>>>>>> 2a7df120228e5ffe775e022eb226b5cc700ac593
 }
