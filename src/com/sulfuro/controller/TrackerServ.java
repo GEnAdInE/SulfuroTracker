@@ -50,8 +50,8 @@ public class TrackerServ implements Runnable{
         serverGUI.getValidateButton().addActionListener(valideButtonAction);
         running = true;
     }
-    public void stop() throws  Exception{
-        if(socket.isConnected()){
+    public void terminate() throws Exception{
+        if(socket != null){
             socket.close();
         }
         running = false;
@@ -198,7 +198,7 @@ public class TrackerServ implements Runnable{
             if (!serverGUI.getTextPort().getText().isEmpty()) {
                 try {
                     port = Integer.parseInt(serverGUI.getTextPort().getText());
-                    stop(); //erreur
+                    //stop(); //erreur
                     server = new ServerSocket(port);
                     run();
                     JOptionPane.showMessageDialog(serverGUI, "Port have been changed ", "Information", JOptionPane.INFORMATION_MESSAGE);

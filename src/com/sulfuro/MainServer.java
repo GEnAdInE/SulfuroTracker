@@ -7,12 +7,14 @@ public class MainServer {
 
     public static void main(String[] args) throws Exception {
 
-        TrackerServGUI server = new TrackerServGUI("Tracker Server");
-        server.setVisible(true);
+        TrackerServGUI serverGUI = new TrackerServGUI("Tracker Server");
+        serverGUI.setVisible(true);
 
 
-        Thread receptionThread = new Thread(new TrackerServ(server));
+        TrackerServ server = new TrackerServ(serverGUI);
+        Thread receptionThread = new Thread(server);
         receptionThread.start();
+        server.terminate();
 
     }
 }
