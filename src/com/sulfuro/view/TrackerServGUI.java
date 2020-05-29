@@ -20,6 +20,9 @@ public class TrackerServGUI extends JFrame {
     private JPanel MainPanel;
     private JTextField textPort;
     private JButton validateButton;
+    private JTextField id;
+    private JTextField firstname;
+    private JTextField lastname;
     private JTable TrackerInputs;
     private JTable TrackerEmployees;
 

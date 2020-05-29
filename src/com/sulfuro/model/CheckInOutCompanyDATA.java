@@ -10,13 +10,16 @@ public class CheckInOutCompanyDATA implements Serializable {
         this.data = data;
         this.employee = employee;
     }
-    public CheckInOutCompanyDATA(CheckInOutDATA data, Company company){
+    public CheckInOutCompanyDATA(CheckInOutDATA data, Company company) throws Exception {
         this.data = data;
         for(Employee employee: company.getCompany()){
             if(data.getId() == employee.getId()){
                 this.employee = employee;
                 break;
             }
+        }
+        if(this.employee == null){
+            throw new Exception("ERROR EMPLOYEE NOT FOUND");
         }
     }
     public void setData(CheckInOutDATA data) {

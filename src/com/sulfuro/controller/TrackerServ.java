@@ -25,6 +25,7 @@ public class TrackerServ implements Runnable{
     private volatile JTable TrackerEmployees;
     private volatile String InputsFilename;
     private volatile String CompanyFilename;
+    private volatile Company company;
 
     public TrackerServ(TrackerServGUI GUI) throws Exception {
         port = 1700;
@@ -36,14 +37,16 @@ public class TrackerServ implements Runnable{
         InputsFilename = "InOutServerDB.ser";
         CompanyFilename = "CompanyServerDB.ser";
 
-        CheckInOutDATATable data = IOmanager.getDataFromFile(InputsFilename);
-        Company company = IOmanager.getCompanyFromFile(CompanyFilename);
+        CheckInOutCompanyDATATable data = IOmanager.getCompanyDataFromFile(InputsFilename);
+        company = IOmanager.getCompanyFromFile(CompanyFilename);
 
         TrackerInputsInit();
         TrackerEmployeeInit();
 
         //TrackerEmployeeSetDBData(company);
+
         TrackerInputSetDBData(data);
+
 
 
         //adding listener
@@ -79,10 +82,16 @@ public class TrackerServ implements Runnable{
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
-
-
-            IOmanager.writeDataToFile(InputsFilename,received);
-            TrackerInputInsertData(received);
+            CheckInOutCompanyDATA translated = null;
+            try {
+                translated = new CheckInOutCompanyDATA(received, company);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            if(translated != null){
+                IOmanager.writeCompanyDataToFile(InputsFilename,translated);
+                TrackerInputInsertData(translated);
+            }
         }
     }
     public void TrackerInputsInit(){
@@ -97,44 +106,46 @@ public class TrackerServ implements Runnable{
         TrackerInputs.setFillsViewportHeight(true);
         serverGUI.getTabs().setComponentAt(0, scrollPane);
     }
-    public void TrackerInputAddData(CheckInOutDATA received){
+    public void TrackerInputAddData(CheckInOutCompanyDATA received){
 
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
 
-        int id = received.getId();
-        int year = received.getTime().get(Calendar.YEAR);
-        int month = received.getTime().get(Calendar.MONTH) + 1;
-        int day = received.getTime().get(Calendar.DAY_OF_MONTH);
-        int hour = received.getTime().get(Calendar.HOUR_OF_DAY);
-        int minute = received.getTime().get(Calendar.MINUTE);
+        int id = received.getEmployee().getId();
+        int year = received.getData().getTime().get(Calendar.YEAR);
+        int month = received.getData().getTime().get(Calendar.MONTH) + 1;
+        int day = received.getData().getTime().get(Calendar.DAY_OF_MONTH);
+        int hour = received.getData().getTime().get(Calendar.HOUR_OF_DAY);
+        int minute = received.getData().getTime().get(Calendar.MINUTE);
 
         String idData = Integer.toString(id);
+        String name = received.getEmployee().toString();
         String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
 
-        model.addRow(new Object[]{idData, "Test", timeData});
+        model.addRow(new Object[]{idData, name, timeData});
 
     }
-    public void TrackerInputInsertData(CheckInOutDATA received){
+    public void TrackerInputInsertData(CheckInOutCompanyDATA received){
 
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
 
-        int id = received.getId();
-        int year = received.getTime().get(Calendar.YEAR);
-        int month = received.getTime().get(Calendar.MONTH) + 1;
-        int day = received.getTime().get(Calendar.DAY_OF_MONTH);
-        int hour = received.getTime().get(Calendar.HOUR_OF_DAY);
-        int minute = received.getTime().get(Calendar.MINUTE);
+        int id = received.getEmployee().getId();
+        int year = received.getData().getTime().get(Calendar.YEAR);
+        int month = received.getData().getTime().get(Calendar.MONTH) + 1;
+        int day = received.getData().getTime().get(Calendar.DAY_OF_MONTH);
+        int hour = received.getData().getTime().get(Calendar.HOUR_OF_DAY);
+        int minute = received.getData().getTime().get(Calendar.MINUTE);
 
         String idData = Integer.toString(id);
+        String name = received.getEmployee().toString();
         String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
 
-        model.insertRow(0, new Object[]{idData, "Test", timeData});
+        model.insertRow(0, new Object[]{idData, name, timeData});
 
     }
 
-    public void TrackerInputSetDBData(CheckInOutDATATable dataTable){
-        List<CheckInOutDATA> dataList = dataTable.getTable();
-        for (CheckInOutDATA data: dataList){
+    public void TrackerInputSetDBData(CheckInOutCompanyDATATable dataTable){
+        List<CheckInOutCompanyDATA> dataList = dataTable.getTable();
+        for (CheckInOutCompanyDATA data: dataList){
             TrackerInputAddData(data);
         }
     }

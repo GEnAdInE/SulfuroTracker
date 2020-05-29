@@ -118,7 +118,6 @@ public class IOmanager {
     {
         try
         {
-            // Reading the object from a file
             FileInputStream fileStream = new FileInputStream(filename);
             ObjectInputStream objStream = new ObjectInputStream(fileStream);
 
@@ -144,24 +143,23 @@ public class IOmanager {
         return new CheckInOutCompanyDATATable();
     }
 
-    public static void writeCompanyDataToFile(String filename, CheckInOutCompanyDATATable dataTable){
+    public static void writeCompanyDataToFile(String filename, CheckInOutCompanyDATA data){
 
-        /*
-        Company companyTable;
+        CheckInOutCompanyDATATable dataTable;
 
         try
         {
-            companyTable = IOmanager.getCompanyFromFile(filename);
-            companyTable.add(employee);
+            dataTable = IOmanager.getCompanyDataFromFile(filename);
+            dataTable.add(data);
 
             FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
 
-            out.writeObject(companyTable);
+            out.writeObject(dataTable);
 
             out.close();
             file.close();
-            System.out.println("WROTE C");
+            System.out.println("WROTE D");
         }
 
         catch(IOException ex)
@@ -169,6 +167,6 @@ public class IOmanager {
             System.out.println("Writing IOException is caught");
         }
 
-         */
+
     }
 }
