@@ -50,7 +50,11 @@ public class TrackerServ implements Runnable{
 
 
         //adding listener
-        serverGUI.getValidateButton().addActionListener(valideButtonAction);
+        serverGUI.getValidateButton().addActionListener(validButtonAction);
+        serverGUI.getAddButton().addActionListener(addButtonAction);
+        serverGUI.getModifyButton().addActionListener(modifyButtonAction);
+        serverGUI.getDeleteButton().addActionListener(deleteButtonAction);
+
         running = true;
     }
     public void terminate() throws Exception{
@@ -202,8 +206,7 @@ public class TrackerServ implements Runnable{
         }
     }
 
-    final ActionListener valideButtonAction = new ActionListener() {
-
+    ActionListener validButtonAction = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (!serverGUI.getTextPort().getText().isEmpty()) {
@@ -226,6 +229,62 @@ public class TrackerServ implements Runnable{
 
             }
 
+        }
+    };
+
+    ActionListener addButtonAction = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
+            {
+                    int ID = Integer.parseInt(serverGUI.getIdAddTextfield().getText());
+                    String firstName = serverGUI.getFirstnameAddTextfield().getText();
+                    String lastName = serverGUI.getLastnameAddTextfield().getText();
+            }
+            else {
+                JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            //ACTION A FAIRE SUR LE BOUTTON
+        }
+    };
+
+
+    ActionListener modifyButtonAction = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if(!serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
+            {
+                int ID = Integer.parseInt(serverGUI.getIdModifyTextfield().getText());
+                String firstName = serverGUI.getFirstnameModifyTextfield().getText();
+                String lastName = serverGUI.getLastnameModifyTextField().getText();
+            }
+            else {
+                JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            //ACTION A FAIRE SUR LE BOUTTON
+        }
+    };
+
+
+
+    ActionListener deleteButtonAction = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            if(!serverGUI.getIdDeleteTextfield().getText().isEmpty())
+            {
+                int ID = Integer.parseInt(serverGUI.getIdDeleteTextfield().getText());
+            } else {
+                JOptionPane.showMessageDialog(serverGUI, "Id can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+
+
+            //ACTION A FAIRE SUR LE BOUTTON
         }
     };
 

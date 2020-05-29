@@ -1,18 +1,9 @@
 package com.sulfuro.view;
 
-import com.sulfuro.model.CheckInOutDATA;
-import com.sulfuro.model.CheckInOutDATATable;
 import com.sulfuro.model.JTextFieldHintUI;
-import com.sulfuro.model.Time;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.Calendar;
-import java.util.List;
 
 public class TrackerServGUI extends JFrame {
     private JTabbedPane Tabs;
@@ -20,9 +11,16 @@ public class TrackerServGUI extends JFrame {
     private JPanel MainPanel;
     private JTextField textPort;
     private JButton validateButton;
-    private JTextField id;
-    private JTextField firstname;
-    private JTextField lastname;
+    private JTextField idAddTextfield;
+    private JTextField firstnameAddTextfield;
+    private JTextField lastnameAddTextfield;
+    private JButton AddButton;
+    private JTextField idModifyTextfield;
+    private JButton modifyButton;
+    private JTextField LastnameModifyTextField;
+    private JTextField FirstnameModifyTextfield;
+    private JButton deleteButton;
+    private JTextField idDeleteTextfield;
     private JTable TrackerInputs;
     private JTable TrackerEmployees;
 
@@ -34,6 +32,7 @@ public class TrackerServGUI extends JFrame {
         this.setContentPane(MainPanel);
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         textPort.setUI(new JTextFieldHintUI("Port", Color.gray));
+        
 
         this.setSize(1000, 500);
     }
@@ -58,4 +57,43 @@ public class TrackerServGUI extends JFrame {
     }
 
 
+    public JTextField getLastnameAddTextfield() {
+        return lastnameAddTextfield;
+    }
+
+    public JTextField getFirstnameAddTextfield() {
+        return firstnameAddTextfield;
+    }
+
+    public JTextField getIdAddTextfield() {
+        return idAddTextfield;
+    }
+
+    public JButton getAddButton() {
+        return AddButton;
+    }
+
+    public JTextField getIdDeleteTextfield() {
+        return idDeleteTextfield;
+    }
+
+    public JButton getDeleteButton() {
+        return deleteButton;
+    }
+
+    public JTextField getFirstnameModifyTextfield() {
+        return FirstnameModifyTextfield;
+    }
+
+    public JTextField getLastnameModifyTextField() {
+        return LastnameModifyTextField;
+    }
+
+    public JButton getModifyButton() {
+        return modifyButton;
+    }
+
+    public JTextField getIdModifyTextfield() {
+        return idModifyTextfield;
+    }
 }
