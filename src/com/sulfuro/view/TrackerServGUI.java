@@ -2,16 +2,23 @@ package com.sulfuro.view;
 
 import com.sulfuro.model.CheckInOutDATA;
 import com.sulfuro.model.CheckInOutDATATable;
+import com.sulfuro.model.JTextFieldHintUI;
+import com.sulfuro.model.Time;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Calendar;
 import java.util.List;
 
 public class TrackerServGUI extends JFrame {
     private JTabbedPane Tabs;
     private JPanel MainPanel;
+    private JTextField portfield;
+    private JButton validateButton;
     private JTable TrackerInputs;
 
     public TrackerServGUI(String title)
@@ -23,6 +30,7 @@ public class TrackerServGUI extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setContentPane(MainPanel);
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
+        portfield.setUI(new JTextFieldHintUI("Port", Color.gray));
 
 
         this.setSize(1000, 500);
@@ -82,4 +90,20 @@ public class TrackerServGUI extends JFrame {
         model.addRow(new Object[]{idData, "Test", timeData});
 
     }
+
+/*
+    ActionListener validateButtonAction = new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JOptionPane checkedPane = new JOptionPane();
+            if (portfield.getText().isEmpty() || portfield.getText().equals("")) {
+                JOptionPane.showMessageDialog(this, "Please put a valid ID", "Error", JOptionPane.ERROR_MESSAGE);
+            } else {
+                Time time = new Time();
+                 = Integer.parseInt(portfield.getText());
+            }
+
+        }
+    }*/
 }

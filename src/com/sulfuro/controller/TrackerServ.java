@@ -13,14 +13,16 @@ import java.net.Socket;
 public class TrackerServ implements Runnable{
 
     private volatile ServerSocket server;
+    private volatile int port;
     private volatile Socket socket;
     private volatile boolean running = false;
     private volatile TrackerServGUI serverGUI;
     private volatile String filename;
 
     public TrackerServ(TrackerServGUI GUI) throws Exception {
+        port = 1700;
         serverGUI = GUI;
-        server = new ServerSocket(1700);
+        server = new ServerSocket(port);
         filename = "InOutServerDB.ser";
 
         CheckInOutDATATable data = IOmanager.getDataFromFile(filename);
