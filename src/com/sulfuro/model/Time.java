@@ -115,6 +115,20 @@ public class Time {
 
     }
 
+    public void setHour(int h)
+    {
+        if(h>=0)
+        {
+            calendar.set(Calendar.HOUR_OF_DAY,h);
+        }
+    }
+    public void setMinute(int m)
+    {
+        if(m>=0) {
+            calendar.set(Calendar.MINUTE, m);
+        }
+    }
+
 
 
 }

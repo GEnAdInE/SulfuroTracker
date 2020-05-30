@@ -13,8 +13,14 @@ import java.awt.event.ActionListener;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 
 public class TrackerServ implements Runnable{
@@ -201,7 +207,15 @@ public class TrackerServ implements Runnable{
             @Override
             public void actionPerformed(ActionEvent e) {
                 int ID = TrackerEmployees.getSelectedRow();
-                JOptionPane.showMessageDialog(MainPanel, "Right-click performed on row " + ID +" and choose Infos");
+                //JOptionPane.showMessageDialog(MainPanel, "Right-click performed on row " + ID +" and choose Infos");
+                Object[][] rows = {
+                        {ID,"Dupont","9h00","17h00","00h30"}
+                };
+                Object[] cols = {
+                        "ID","Name","Start Time","End time","Bonus time"
+                };
+                JTable exempleTable = new JTable(rows, cols);
+                JOptionPane.showMessageDialog(MainPanel, new JScrollPane(exempleTable));
             }
         });
         popupMenu.add(visualize);
@@ -253,10 +267,12 @@ public class TrackerServ implements Runnable{
             if (!serverGUI.getTextPort().getText().isEmpty()) {
                 try {
                     port = Integer.parseInt(serverGUI.getTextPort().getText());
+                    // ne semble pas marcher
                     terminate();
                     server = new ServerSocket(port);
                     Thread receptionThread = new Thread(String.valueOf(this));
                     receptionThread.start();
+
                     JOptionPane.showMessageDialog(serverGUI, "Port have been changed ", "Information", JOptionPane.INFORMATION_MESSAGE);
 
                 } catch (NumberFormatException | IOException nfe) {
@@ -280,11 +296,20 @@ public class TrackerServ implements Runnable{
             int id = -1;
             String firstName = null;
             String lastName = null;
-            if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
+            Time startTime = new Time();
+            Time endTime = new Time();
+            if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty() || !serverGUI.getStartTimeAddTextfield().getText().isEmpty() || !serverGUI.getEndTimeAddTextfield().getText().isEmpty())
             {
                     id = Integer.parseInt(serverGUI.getIdAddTextfield().getText());
                     firstName = serverGUI.getFirstnameAddTextfield().getText();
                     lastName = serverGUI.getLastnameAddTextfield().getText();
+                    LocalTime lts = LocalTime.parse(serverGUI.getStartTimeAddTextfield().getText());
+                    LocalTime lte = LocalTime.parse(serverGUI.getEndTimeAddTextfield().getText());
+                    startTime.setHour(lts.getHour());
+                    startTime.setMinute(lts.getMinute());
+                    endTime.setHour(lte.getHour());
+                    endTime.setMinute(lte.getMinute());
+
             }
             else {
                 JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
@@ -308,11 +333,23 @@ public class TrackerServ implements Runnable{
         @Override
         public void actionPerformed(ActionEvent e) {
 
+            int id = -1;
+            String firstName = null;
+            String lastName = null;
+            Time startTime = new Time();
+            Time endTime = new Time();
             if(!serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
             {
-                int ID = Integer.parseInt(serverGUI.getIdModifyTextfield().getText());
-                String firstName = serverGUI.getFirstnameModifyTextfield().getText();
-                String lastName = serverGUI.getLastnameModifyTextField().getText();
+                id = Integer.parseInt(serverGUI.getIdModifyTextfield().getText());
+                firstName = serverGUI.getFirstnameModifyTextfield().getText();
+                lastName = serverGUI.getLastnameModifyTextField().getText();
+                LocalTime lts = LocalTime.parse(serverGUI.getStartTimeModifyTextfield().getText());
+                LocalTime lte = LocalTime.parse(serverGUI.getEndTimeModifyTextfield().getText());
+                startTime.setHour(lts.getHour());
+                startTime.setMinute(lts.getMinute());
+                endTime.setHour(lte.getHour());
+                endTime.setMinute(lte.getMinute());
+
             }
             else {
                 JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
