@@ -11,11 +11,7 @@ import java.util.GregorianCalendar;
  */
 public class Time {
     private Calendar calendar;
-    private int year;
-    private int month;
-    private int day;
-    private int hour;
-    private int minute;
+
 
     /**
      * Time constructor , initialize all value
@@ -23,11 +19,6 @@ public class Time {
     public Time()
     {
         calendar = new GregorianCalendar();
-        year = calendar.get(Calendar.YEAR);
-        month = calendar.get(Calendar.MONTH);
-        day = calendar.get(Calendar.DAY_OF_MONTH);
-        hour = calendar.get(Calendar.HOUR_OF_DAY);
-        minute = calendar.get(Calendar.MINUTE);
     }
 
     /**
@@ -36,9 +27,9 @@ public class Time {
      */
     public String getDate()
     {
-        String strMonth = new SimpleDateFormat("MMM", Locale.US).format(month);
+        String strMonth = new SimpleDateFormat("MMM", Locale.US).format(calendar.get(Calendar.MONTH));
         String prefix;
-        switch (day)
+        switch (calendar.get(Calendar.DAY_OF_MONTH))
         {
             case 1: prefix = "st ";
             case 2: prefix = "nd ";
@@ -47,11 +38,10 @@ public class Time {
         }
 
         StringBuilder str = new StringBuilder();
-        str.append(strMonth).append(" ").append(day).append(prefix).append(", ").append(year);
+        str.append(strMonth).append(" ").append(getDay()).append(prefix).append(", ").append(getYear());
         return str.toString();
 
     }
-
     /**
      * Get the current time
      * @return string of the time
@@ -61,7 +51,6 @@ public class Time {
     {
         return timeToString(calendar);
     }
-
     /**
      * Fully Rounded time to get send to the server
      * @return array of time [year|month|day|hour|minute]
@@ -78,7 +67,6 @@ public class Time {
         return arrayTime;
 
     }
-
     /**
      * Calculate the rounded time to 15min into a new Calendar
      * @return Calendar of the rounded time
@@ -87,14 +75,11 @@ public class Time {
     {
         Calendar c = calendar;
 
-        int mod = minute % 15;
+        int mod = getMinute() % 15;
         c.add(Calendar.MINUTE,mod < 8 ? -mod : (15-mod));
 
         return c;
     }
-
-
-
 
     /**
      * Convert hours and minute to a string but with a calendar
@@ -115,6 +100,10 @@ public class Time {
 
     }
 
+    /**
+     * set a specific hour
+     * @param h
+     */
     public void setHour(int h)
     {
         if(h>=0)
@@ -122,6 +111,11 @@ public class Time {
             calendar.set(Calendar.HOUR_OF_DAY,h);
         }
     }
+
+    /**
+     * set a specific minute
+     * @param m
+     */
     public void setMinute(int m)
     {
         if(m>=0) {
@@ -129,6 +123,28 @@ public class Time {
         }
     }
 
+    public int getDay()
+    {
+        return calendar.get(Calendar.DAY_OF_MONTH);
+    }
+    public int getMonth()
+    {
+        return calendar.get(Calendar.MONTH);
+    }
+
+    public int getHour() {
+        return calendar.get(Calendar.HOUR_OF_DAY);
+    }
+
+    public int getMinute()
+    {
+        return calendar.get(Calendar.MINUTE);
+    }
+
+    public int getYear()
+    {
+        return calendar.get(Calendar.YEAR);
+    }
 
 
 }
