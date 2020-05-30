@@ -15,6 +15,5 @@ public class MainServer {
         Thread receptionThread = new Thread(server);
         receptionThread.start();
 
-
     }
 }

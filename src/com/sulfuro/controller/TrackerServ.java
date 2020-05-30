@@ -4,7 +4,10 @@ import com.sulfuro.model.*;
 import com.sulfuro.view.TrackerServGUI;
 
 import javax.swing.*;
+import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -21,6 +24,7 @@ public class TrackerServ implements Runnable{
     private volatile Socket socket;
     private volatile boolean running = false;
     private volatile TrackerServGUI serverGUI;
+    private volatile JPanel MainPanel;
     private volatile JTable TrackerInputs;
     private volatile JTable TrackerEmployees;
     private volatile String InputsFilename;
@@ -30,6 +34,7 @@ public class TrackerServ implements Runnable{
     public TrackerServ(TrackerServGUI GUI) throws Exception {
         port = 1700;
         serverGUI = GUI;
+        MainPanel = serverGUI.getMainPanel();
         TrackerInputs = serverGUI.getTrackerInputs();
         TrackerEmployees = serverGUI.getTrackerEmployees();
 
@@ -43,9 +48,9 @@ public class TrackerServ implements Runnable{
         TrackerInputsInit();
         TrackerEmployeeInit();
 
-        //TrackerEmployeeSetDBData(company);
-
         TrackerInputSetDBData(data);
+        TrackerEmployeeSetDBData(company);
+
 
 
 
@@ -99,13 +104,18 @@ public class TrackerServ implements Runnable{
         }
     }
     public void TrackerInputsInit(){
-        DefaultTableModel tableModel = new DefaultTableModel();
+        DefaultTableModel tableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
         tableModel.addColumn("ID");
         tableModel.addColumn("NOM-PRENOM");
         tableModel.addColumn("HEURE");
 
-        TrackerInputs=new JTable(tableModel);
 
+        TrackerInputs=new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(TrackerInputs);
         TrackerInputs.setFillsViewportHeight(true);
         serverGUI.getTabs().setComponentAt(0, scrollPane);
@@ -154,32 +164,63 @@ public class TrackerServ implements Runnable{
         }
     }
     public void TrackerEmployeeInit(){
-        DefaultTableModel tableModel = new DefaultTableModel();
+        DefaultTableModel tableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
         tableModel.addColumn("ID");
         tableModel.addColumn("NOM-PRENOM");
 
         TrackerEmployees=new JTable(tableModel);
+        final JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.addPopupMenuListener(new PopupMenuListener() {
+
+            @Override
+            public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        int rowAtPoint = TrackerEmployees.rowAtPoint(SwingUtilities.convertPoint(popupMenu, new Point(0, 0), TrackerEmployees));
+                        if (rowAtPoint > -1) {
+                            TrackerEmployees.setRowSelectionInterval(rowAtPoint, rowAtPoint);
+                        }
+                    }
+                });
+            }
+            @Override
+            public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {}
+            @Override
+            public void popupMenuCanceled(PopupMenuEvent e) {}
+        });
+
+        JMenuItem visualize = new JMenuItem("More infos");
+        visualize.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int ID = TrackerEmployees.getSelectedRow();
+                JOptionPane.showMessageDialog(MainPanel, "Right-click performed on row " + ID +" and choose Infos");
+            }
+        });
+        popupMenu.add(visualize);
+        TrackerEmployees.setComponentPopupMenu(popupMenu);
 
         JScrollPane scrollPane = new JScrollPane(TrackerEmployees);
         TrackerEmployees.setFillsViewportHeight(true);
         serverGUI.getEmployeeTabs().setComponentAt(0, scrollPane);
     }
-    public void TrackerEmployeeAddData(Employee employee, CheckInOutDATA received){
+    public void TrackerEmployeeAddData(Employee employee){
 
         DefaultTableModel model = (DefaultTableModel) TrackerEmployees.getModel();
 
         int id = employee.getId();
-        int year = received.getTime().get(Calendar.YEAR);
-        int month = received.getTime().get(Calendar.MONTH) + 1;
-        int day = received.getTime().get(Calendar.DAY_OF_MONTH);
-        int hour = received.getTime().get(Calendar.HOUR_OF_DAY);
-        int minute = received.getTime().get(Calendar.MINUTE);
 
         String idData = Integer.toString(id);
-        String employeeInfos = employee.toString();
-        String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
+        String name = employee.toString();
 
-        model.addRow(new Object[]{idData, employeeInfos, timeData});
+        model.addRow(new Object[]{idData, name});
 
     }
     public void TrackerEmployeeInsertData(Employee employee, CheckInOutDATA received){
@@ -199,10 +240,10 @@ public class TrackerServ implements Runnable{
 
         model.insertRow(0, new Object[]{idData, employeeInfos, timeData});
     }
-    public void TrackerInputSetDBData(Company company){
+    public void TrackerEmployeeSetDBData(Company company){
         List<Employee> employeeList = company.getCompany();
         for (Employee employee: employeeList){
-
+            TrackerEmployeeAddData(employee);
         }
     }
 
@@ -236,17 +277,28 @@ public class TrackerServ implements Runnable{
 
         @Override
         public void actionPerformed(ActionEvent e) {
-
+            int id = -1;
+            String firstName = null;
+            String lastName = null;
             if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
             {
-                    int ID = Integer.parseInt(serverGUI.getIdAddTextfield().getText());
-                    String firstName = serverGUI.getFirstnameAddTextfield().getText();
-                    String lastName = serverGUI.getLastnameAddTextfield().getText();
+                    id = Integer.parseInt(serverGUI.getIdAddTextfield().getText());
+                    firstName = serverGUI.getFirstnameAddTextfield().getText();
+                    lastName = serverGUI.getLastnameAddTextfield().getText();
             }
             else {
                 JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            //ACTION A FAIRE SUR LE BOUTTON
+            if(id != -1 && firstName != null && lastName != null){
+                Employee translated = new Employee(id, lastName, firstName);
+                try {
+                    IOmanager.writeCompanyToFile(CompanyFilename, translated);
+                    TrackerEmployeeAddData(translated);
+                    company = IOmanager.getCompanyFromFile(CompanyFilename);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+            }
         }
     };
 

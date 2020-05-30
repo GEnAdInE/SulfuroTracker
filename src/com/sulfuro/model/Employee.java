@@ -2,7 +2,7 @@ package com.sulfuro.model;
 
 import java.io.Serializable;
 
-public class Employee implements Serializable {
+public class Employee implements Serializable, Comparable<Employee> {
     private int id;
     private String name;
     private String firstname;
@@ -32,5 +32,9 @@ public class Employee implements Serializable {
     }
     public String toString(){
         return this.name + " " + this.firstname;
+    }
+    @Override
+    public int compareTo(Employee employee) {
+        return this.toString().compareTo(employee.toString());
     }
 }

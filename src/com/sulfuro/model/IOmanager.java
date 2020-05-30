@@ -1,6 +1,8 @@
 package com.sulfuro.model;
 
 import java.io.*;
+import java.util.Collection;
+import java.util.Collections;
 
 public class IOmanager {
 
@@ -89,7 +91,7 @@ public class IOmanager {
         return new Company();
     }
 
-    public static void writeCompanyToFile(String filename, Employee employee){
+    public static void writeCompanyToFile(String filename, Employee employee) throws Exception {
 
 
         Company companyTable;
@@ -97,7 +99,13 @@ public class IOmanager {
         try
         {
             companyTable = IOmanager.getCompanyFromFile(filename);
-            companyTable.add(employee);
+
+            if(companyTable.checkIdNotUsed(employee)){
+                companyTable.add(employee);
+            } else {
+                throw new Exception("ID ALREADY USED COULDNT CREATE USER");
+            }
+            Collections.sort(companyTable.getCompany());
 
             FileOutputStream file = new FileOutputStream(filename);
             ObjectOutputStream out = new ObjectOutputStream(file);
@@ -109,8 +117,7 @@ public class IOmanager {
             System.out.println("WROTE C");
         }
 
-        catch(IOException ex)
-        {
+        catch(IOException ex) {
             System.out.println("Writing IOException is caught");
         }
     }
@@ -166,7 +173,5 @@ public class IOmanager {
         {
             System.out.println("Writing IOException is caught");
         }
-
-
     }
 }
