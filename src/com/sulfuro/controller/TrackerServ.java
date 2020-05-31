@@ -242,12 +242,13 @@ public class TrackerServ implements Runnable{
         DefaultTableModel model = (DefaultTableModel) TrackerEmployees.getModel();
 
         int id = employee.getId();
+        /*
         int year = received.getTime().getYear();
         int month = received.getTime().getMonth() + 1;
         int day = received.getTime().getDay();
         int hour = received.getTime().getHour();
         int minute = received.getTime().getMinute();
-
+        */
         String idData = Integer.toString(id);
         String name = employee.toString();
 
