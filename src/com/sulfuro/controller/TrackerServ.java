@@ -300,9 +300,9 @@ public class TrackerServ implements Runnable{
             int id = -1;
             String firstName = null;
             String lastName = null;
-            Time startTime;
-            Time endTime;
-            if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty() || !serverGUI.getStartTimeAddTextfield().getText().isEmpty() || !serverGUI.getEndTimeAddTextfield().getText().isEmpty())
+            Time startTime = null;
+            Time endTime = null;
+            if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameAddTextfield().getText().isEmpty() || !serverGUI.getLastnameAddTextfield().getText().isEmpty() || !serverGUI.getStartTimeAddTextfield().getText().isEmpty() || !serverGUI.getEndTimeAddTextfield().getText().isEmpty())
             {
                     id = Integer.parseInt(serverGUI.getIdAddTextfield().getText());
                     firstName = serverGUI.getFirstnameAddTextfield().getText();
@@ -311,15 +311,12 @@ public class TrackerServ implements Runnable{
                     LocalTime lte = LocalTime.parse(serverGUI.getEndTimeAddTextfield().getText());
                     startTime= new Time(lts.getHour(),lts.getMinute());
                     endTime = new Time(lte.getHour(),lte.getMinute());
-                    Time workingTime = Time.Substraction(endTime,startTime);
-                    System.out.println(Time.TimeToString(workingTime));
-
             }
             else {
-                JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname or Start time or End time can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            if(id != -1 && firstName != null && lastName != null){
-                Employee translated = new Employee(id, lastName, firstName);
+            if(id != -1 && firstName != null && lastName != null && startTime != null && endTime != null){
+                Employee translated = new Employee(id, lastName, firstName, startTime, endTime);
                 try {
                     IOmanager.writeCompanyToFile(CompanyFilename, translated);
                     TrackerEmployeeAddData(translated);
@@ -340,8 +337,8 @@ public class TrackerServ implements Runnable{
             int id = -1;
             String firstName = null;
             String lastName = null;
-            Time startTime;
-            Time endTime;
+            Time startTime = null;
+            Time endTime = null;
             if(!serverGUI.getOldIDModifyTextField().getText().isEmpty() || !serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
             {
                 oldID = Integer.parseInt(serverGUI.getOldIDModifyTextField().getText());
@@ -352,17 +349,14 @@ public class TrackerServ implements Runnable{
                 LocalTime lte = LocalTime.parse(serverGUI.getEndTimeModifyTextfield().getText());
                 startTime= new Time(lts.getHour(),lts.getMinute());
                 endTime = new Time(lte.getHour(),lte.getMinute());
-                Time workingTime = Time.Substraction(endTime,startTime);
-                System.out.println(Time.TimeToString(workingTime));
-
             }
             else {
-                JOptionPane.showMessageDialog(serverGUI, "Old ID or New Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(serverGUI, "Old ID or New ID or Firstname or Lastname or Start time or End time can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            if(oldID != -1 && id != -1 && firstName != null && lastName != null){
+            if(oldID != -1 && id != -1 && firstName != null && lastName != null && startTime != null && endTime != null){
                 Employee translated = company.getEmployeeByID(oldID);
                 if(translated != null){
-                    Employee modifiedTranslated = new Employee(id, firstName, lastName);
+                    Employee modifiedTranslated = new Employee(id, firstName, lastName, startTime, endTime);
                     try {
                         IOmanager.modifyCompanyToFile(CompanyFilename, translated, modifiedTranslated);
                         TrackerEmployeeDelData(translated);

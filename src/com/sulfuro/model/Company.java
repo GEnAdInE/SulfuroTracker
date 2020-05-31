@@ -17,7 +17,7 @@ public class Company implements Serializable {
     public void remove(Employee employee) { company.remove(employee); }
     public boolean checkIdNotUsed(Employee employee){
         for(Employee e: company){
-            if(e.getId() == employee.getId()){
+            if(e.equals(employee)){
                 return false;
             }
         }
