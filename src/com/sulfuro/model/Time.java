@@ -22,6 +22,7 @@ public class Time {
     }
     public Time(int h,int m)
     {
+        calendar = new GregorianCalendar();
         calendar.set(Calendar.HOUR_OF_DAY,h);
         calendar.set(Calendar.MINUTE,m);
     }

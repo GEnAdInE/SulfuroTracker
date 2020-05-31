@@ -6,15 +6,15 @@ public class Employee implements Serializable, Comparable<Employee> {
     private int id;
     private String name;
     private String firstname;
-    private Time supposedWorkingTime;
-    private Time bonusTime;
+    //private Time supposedWorkingTime;
+    //private Time bonusTime;
 
     public Employee(int id, String name, String firstname){
         this.id = id;
         this.name = name;
         this.firstname = firstname;
-        this.bonusTime = new Time(0,0);
-        this.supposedWorkingTime = new Time(7,0);// soustraction des 2 temps fournis dans l'ui
+        //this.bonusTime = new Time(0,0);
+        //this.supposedWorkingTime = new Time(7,0);// soustraction des 2 temps fournis dans l'ui
     }
     public void setId(int id) {
         this.id = id;
@@ -37,6 +37,7 @@ public class Employee implements Serializable, Comparable<Employee> {
     public String toString(){
         return this.name + " " + this.firstname;
     }
+    /*
     public Time getSupposedWorkingTime()
     {
         return supposedWorkingTime;
@@ -44,7 +45,7 @@ public class Employee implements Serializable, Comparable<Employee> {
     public Time getBonusTime()
     {
         return bonusTime;
-    }
+    }*/
 
     @Override
     public int compareTo(Employee employee) {
