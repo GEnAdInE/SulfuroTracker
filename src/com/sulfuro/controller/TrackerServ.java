@@ -296,8 +296,8 @@ public class TrackerServ implements Runnable{
             int id = -1;
             String firstName = null;
             String lastName = null;
-            Time startTime = new Time();
-            Time endTime = new Time();
+            Time startTime;
+            Time endTime;
             if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty() || !serverGUI.getStartTimeAddTextfield().getText().isEmpty() || !serverGUI.getEndTimeAddTextfield().getText().isEmpty())
             {
                     id = Integer.parseInt(serverGUI.getIdAddTextfield().getText());
@@ -305,10 +305,8 @@ public class TrackerServ implements Runnable{
                     lastName = serverGUI.getLastnameAddTextfield().getText();
                     LocalTime lts = LocalTime.parse(serverGUI.getStartTimeAddTextfield().getText());
                     LocalTime lte = LocalTime.parse(serverGUI.getEndTimeAddTextfield().getText());
-                    startTime.setHour(lts.getHour());
-                    startTime.setMinute(lts.getMinute());
-                    endTime.setHour(lte.getHour());
-                    endTime.setMinute(lte.getMinute());
+                    startTime= new Time(lts.getHour(),lts.getMinute());
+                    endTime = new Time(lte.getHour(),lte.getMinute());
 
             }
             else {
@@ -336,8 +334,8 @@ public class TrackerServ implements Runnable{
             int id = -1;
             String firstName = null;
             String lastName = null;
-            Time startTime = new Time();
-            Time endTime = new Time();
+            Time startTime;
+            Time endTime;
             if(!serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
             {
                 id = Integer.parseInt(serverGUI.getIdModifyTextfield().getText());
@@ -345,10 +343,8 @@ public class TrackerServ implements Runnable{
                 lastName = serverGUI.getLastnameModifyTextField().getText();
                 LocalTime lts = LocalTime.parse(serverGUI.getStartTimeModifyTextfield().getText());
                 LocalTime lte = LocalTime.parse(serverGUI.getEndTimeModifyTextfield().getText());
-                startTime.setHour(lts.getHour());
-                startTime.setMinute(lts.getMinute());
-                endTime.setHour(lte.getHour());
-                endTime.setMinute(lte.getMinute());
+                startTime= new Time(lts.getHour(),lts.getMinute());
+                endTime = new Time(lte.getHour(),lte.getMinute());
 
             }
             else {

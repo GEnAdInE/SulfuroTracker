@@ -20,6 +20,11 @@ public class Time {
     {
         calendar = new GregorianCalendar();
     }
+    public Time(int h,int m)
+    {
+        calendar.set(Calendar.HOUR_OF_DAY,h);
+        calendar.set(Calendar.MINUTE,m);
+    }
 
     /**
      * Get the current date
@@ -146,5 +151,9 @@ public class Time {
         return calendar.get(Calendar.YEAR);
     }
 
+    public Calendar getCalendar()
+    {
+        return calendar;
+    }
 
 }
