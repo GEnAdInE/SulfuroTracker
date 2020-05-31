@@ -6,15 +6,23 @@ import java.util.List;
 
 public class Company implements Serializable {
     private List<Employee> company;
+    private List<Department> dep;
 
-    public Company(){ company = new ArrayList<Employee>(); }
+    public Company(){
+        company = new ArrayList<Employee>();
+        dep = new ArrayList<Department>();
+        dep.add(new Department(0,"Worker"));
+        dep.add(new Department(1,"Manager"));
+        dep.add(new Department(2,"CEO"));
+    }
     public List<Employee> getCompany() {
         return company;
     }
-    public void add(Employee employee) {
+    public List<Department> getDep(){ return dep;}
+    public void addEmployee(Employee employee) {
         company.add(employee);
     }
-    public void remove(Employee employee) { company.remove(employee); }
+    public void removeEmployee(Employee employee) { company.remove(employee); }
     public boolean checkIdNotUsed(Employee employee){
         for(Employee e: company){
             if(e.equals(employee)){
@@ -40,4 +48,17 @@ public class Company implements Serializable {
         }
         return null;
     }
+
+    public String getDep(int id)
+    {
+        for(int i=0;i<dep.size();i++)
+        {
+            if(dep.get(i).getId() == id)
+            {
+                return dep.get(i).getName();
+            }
+        }
+        return "";
+    }
+
 }

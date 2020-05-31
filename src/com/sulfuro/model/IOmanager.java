@@ -1,7 +1,6 @@
 package com.sulfuro.model;
 
 import java.io.*;
-import java.util.Collection;
 import java.util.Collections;
 
 public class IOmanager {
@@ -97,7 +96,7 @@ public class IOmanager {
         {
             companyTable = IOmanager.getCompanyFromFile(filename);
             if(companyTable.checkIdNotUsed(employee)){
-                companyTable.add(employee);
+                companyTable.addEmployee(employee);
             } else {
                 throw new Exception("ID ALREADY USED COULDNT CREATE USER");
             }
@@ -122,8 +121,8 @@ public class IOmanager {
         try
         {
             companyTable = IOmanager.getCompanyFromFile(filename);
-            companyTable.remove(oldEmployee);
-            companyTable.add(employee);
+            companyTable.removeEmployee(oldEmployee);
+            companyTable.addEmployee(employee);
 
             Collections.sort(companyTable.getCompany());
 

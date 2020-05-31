@@ -50,18 +50,14 @@ public class TrackerServ implements Runnable{
         CompanyFilename = "CompanyServerDB.ser";
 
 
-        serverGUI.getComboBoxAdd().addItem("Test0");
-        serverGUI.getComboBoxAdd().addItem("Test1");
-        serverGUI.getComboBoxAdd().addItem("Test2");
-
-        serverGUI.getComboBoxModify().addItem("Test0");
-        serverGUI.getComboBoxModify().addItem("Test1");
-        serverGUI.getComboBoxModify().addItem("Test2");
 
 
 
         CheckInOutCompanyDATATable data = IOmanager.getCompanyDataFromFile(InputsFilename);
         company = IOmanager.getCompanyFromFile(CompanyFilename);
+
+
+
 
         TrackerInputsInit();
         TrackerEmployeeInit();
@@ -70,7 +66,12 @@ public class TrackerServ implements Runnable{
         TrackerEmployeeSetDBData(company);
 
 
+        for(int i=0;i<company.getDep().size();i++)
+        {
+            serverGUI.getComboBoxAdd().addItem(company.getDep().get(i));
+            serverGUI.getComboBoxModify().addItem(company.getDep().get(i));
 
+        }
 
         //adding listener
         serverGUI.getValidateButton().addActionListener(validButtonAction);
@@ -191,6 +192,7 @@ public class TrackerServ implements Runnable{
 
         tableModel.addColumn("ID");
         tableModel.addColumn("NOM-PRENOM");
+        tableModel.addColumn("DEPARTMENT");
 
         TrackerEmployees=new JTable(tableModel);
         final JPopupMenu popupMenu = new JPopupMenu();
@@ -245,8 +247,9 @@ public class TrackerServ implements Runnable{
 
         String idData = Integer.toString(id);
         String name = employee.toString();
+        String dep = company.getDep(employee.getDepId());
 
-        model.addRow(new Object[]{idData, name});
+        model.addRow(new Object[]{idData, name,dep});
 
     }
     public void TrackerEmployeeDelData(Employee employee){
@@ -280,6 +283,8 @@ public class TrackerServ implements Runnable{
         tableModel.addColumn("NOM-PRENOM");
         tableModel.addColumn("HEURE");
         tableModel.addColumn("BONUS TIME");
+        tableModel.addColumn("DEPARTMENT");
+        tableModel.addColumn("ISWORKING");
 
         TrackerEmployeesVisualize=new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(TrackerEmployeesVisualize);
@@ -294,15 +299,30 @@ public class TrackerServ implements Runnable{
         String idData = Integer.toString(id);
         String name = received.getEmployee().toString();
 
+        String working = null;
+        Boolean isworking = received.getEmployee().getIsWorking();
+        if(isworking)
+        {
+            working = "working";
+        }
+        else
+        {
+            working = "not working";
+        }
+
         int year = received.getData().getTime().getYear();
         int month = received.getData().getTime().getMonth() + 1;
         int day = received.getData().getTime().getDay();
         int hour = received.getData().getTime().getHour();
         int minute = received.getData().getTime().getMinute();
 
+        Department dep = company.getDep().get(received.getEmployee().getDepId());
+        Time bonustime = received.getEmployee().getBonusTime();
+
+
         String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
 
-        model.addRow(new Object[]{idData, name, timeData, "NOT IMPLEMENTED"});
+        model.addRow(new Object[]{idData, name, timeData, Time.TimeToString(bonustime),dep.getName(),working});
 
     }
     ActionListener validButtonAction = new ActionListener() {
@@ -341,6 +361,7 @@ public class TrackerServ implements Runnable{
             String lastName = null;
             Time startTime = null;
             Time endTime = null;
+            Department dep = null;
             if(!serverGUI.getIdAddTextfield().getText().isEmpty() || !serverGUI.getFirstnameAddTextfield().getText().isEmpty() || !serverGUI.getLastnameAddTextfield().getText().isEmpty() || !serverGUI.getStartTimeAddTextfield().getText().isEmpty() || !serverGUI.getEndTimeAddTextfield().getText().isEmpty())
             {
                     id = Integer.parseInt(serverGUI.getIdAddTextfield().getText());
@@ -350,12 +371,14 @@ public class TrackerServ implements Runnable{
                     LocalTime lte = LocalTime.parse(serverGUI.getEndTimeAddTextfield().getText());
                     startTime= new Time(lts.getHour(),lts.getMinute());
                     endTime = new Time(lte.getHour(),lte.getMinute());
+                    dep = (Department)serverGUI.getComboBoxAdd().getSelectedItem();
+
             }
             else {
                 JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname or Start time or End time can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
             if(id != -1 && firstName != null && lastName != null && startTime != null && endTime != null){
-                Employee translated = new Employee(id, lastName, firstName, startTime, endTime);
+                Employee translated = new Employee(id, lastName, firstName, startTime, endTime,dep.getId());
                 try {
                     IOmanager.writeCompanyToFile(CompanyFilename, translated);
                     TrackerEmployeeAddData(translated);
@@ -378,6 +401,8 @@ public class TrackerServ implements Runnable{
             String lastName = null;
             Time startTime = null;
             Time endTime = null;
+            Department dep = null;
+
             if(!serverGUI.getOldIDModifyTextField().getText().isEmpty() || !serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
             {
                 oldID = Integer.parseInt(serverGUI.getOldIDModifyTextField().getText());
@@ -388,6 +413,7 @@ public class TrackerServ implements Runnable{
                 LocalTime lte = LocalTime.parse(serverGUI.getEndTimeModifyTextfield().getText());
                 startTime= new Time(lts.getHour(),lts.getMinute());
                 endTime = new Time(lte.getHour(),lte.getMinute());
+                dep = (Department)serverGUI.getComboBoxModify().getSelectedItem();
             }
             else {
                 JOptionPane.showMessageDialog(serverGUI, "Old ID or New ID or Firstname or Lastname or Start time or End time can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
@@ -395,7 +421,7 @@ public class TrackerServ implements Runnable{
             if(oldID != -1 && id != -1 && firstName != null && lastName != null && startTime != null && endTime != null){
                 Employee translated = company.getEmployeeByID(oldID);
                 if(translated != null){
-                    Employee modifiedTranslated = new Employee(id, firstName, lastName, startTime, endTime);
+                    Employee modifiedTranslated = new Employee(id, firstName, lastName, startTime, endTime,dep.getId());
                     try {
                         IOmanager.modifyCompanyToFile(CompanyFilename, translated, modifiedTranslated);
                         TrackerEmployeeDelData(translated);

@@ -9,15 +9,24 @@ public class Employee implements Serializable, Comparable<Employee> {
     private Time startTime;
     private Time endTime;
     private Time bonusTime;
+    private int depId;
+    private boolean isWorking;
 
-    public Employee(int id, String name, String firstname, Time startTime, Time endTime){
+    public Employee(int id, String name, String firstname, Time startTime, Time endTime,int depId){
         this.id = id;
         this.name = name;
         this.firstname = firstname;
         this.startTime = startTime;
         this.endTime = endTime;
         this.bonusTime = new Time(0,0);
+        this.depId = depId;
+        this.isWorking = false;
     }
+    public int getDepId()
+    {
+        return depId;
+    }
+
     public int getId() {
         return id;
     }
@@ -53,5 +62,13 @@ public class Employee implements Serializable, Comparable<Employee> {
             return true;
         }
         return false;
+    }
+
+    public boolean getIsWorking() {
+        return isWorking;
+    }
+
+    public void setWorking(boolean working) {
+        isWorking = working;
     }
 }
