@@ -311,6 +311,8 @@ public class TrackerServ implements Runnable{
                     LocalTime lte = LocalTime.parse(serverGUI.getEndTimeAddTextfield().getText());
                     startTime= new Time(lts.getHour(),lts.getMinute());
                     endTime = new Time(lte.getHour(),lte.getMinute());
+                    Time workingTime = Time.Substraction(endTime,startTime);
+                    System.out.println(Time.TimeToString(workingTime));
 
             }
             else {
@@ -350,6 +352,8 @@ public class TrackerServ implements Runnable{
                 LocalTime lte = LocalTime.parse(serverGUI.getEndTimeModifyTextfield().getText());
                 startTime= new Time(lts.getHour(),lts.getMinute());
                 endTime = new Time(lte.getHour(),lte.getMinute());
+                Time workingTime = Time.Substraction(endTime,startTime);
+                System.out.println(Time.TimeToString(workingTime));
 
             }
             else {
