@@ -223,22 +223,20 @@ public class TrackerServ implements Runnable{
         model.addRow(new Object[]{idData, name});
 
     }
-    public void TrackerEmployeeInsertData(Employee employee, CheckInOutDATA received){
+    public void TrackerEmployeeDelData(Employee employee){
 
-        DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
+        DefaultTableModel model = (DefaultTableModel) TrackerEmployees.getModel();
 
         int id = employee.getId();
-        int year = received.getTime().get(Calendar.YEAR);
-        int month = received.getTime().get(Calendar.MONTH) + 1;
-        int day = received.getTime().get(Calendar.DAY_OF_MONTH);
-        int hour = received.getTime().get(Calendar.HOUR_OF_DAY);
-        int minute = received.getTime().get(Calendar.MINUTE);
 
         String idData = Integer.toString(id);
-        String employeeInfos = employee.toString();
-        String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
+        String name = employee.toString();
 
-        model.insertRow(0, new Object[]{idData, employeeInfos, timeData});
+        for (int i = model.getRowCount() - 1; i >= 0; --i) {
+            if (model.getValueAt(i, 0).equals(idData)) {
+                model.removeRow(i);
+            }
+        }
     }
     public void TrackerEmployeeSetDBData(Company company){
         List<Employee> employeeList = company.getCompany();
@@ -307,21 +305,38 @@ public class TrackerServ implements Runnable{
 
         @Override
         public void actionPerformed(ActionEvent e) {
+            int oldID = -1;
+            int id = -1;
+            String firstName = null;
+            String lastName = null;
 
-            if(!serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
+            if(!serverGUI.getOldIDModifyTextField().getText().isEmpty() || !serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
             {
-                int ID = Integer.parseInt(serverGUI.getIdModifyTextfield().getText());
-                String firstName = serverGUI.getFirstnameModifyTextfield().getText();
-                String lastName = serverGUI.getLastnameModifyTextField().getText();
+                oldID = Integer.parseInt(serverGUI.getOldIDModifyTextField().getText());
+                id = Integer.parseInt(serverGUI.getIdModifyTextfield().getText());
+                firstName = serverGUI.getFirstnameModifyTextfield().getText();
+                lastName = serverGUI.getLastnameModifyTextField().getText();
             }
             else {
-                JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(serverGUI, "Old ID or New Id or Firstname or Lastname can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            //ACTION A FAIRE SUR LE BOUTTON
+            if(oldID != -1 && id != -1 && firstName != null && lastName != null){
+                Employee translated = company.getEmployeeByID(oldID);
+                if(translated != null){
+                    Employee modifiedTranslated = new Employee(id, firstName, lastName);
+                    try {
+                        IOmanager.modifyCompanyToFile(CompanyFilename, translated, modifiedTranslated);
+                        TrackerEmployeeDelData(translated);
+                        TrackerEmployeeAddData(modifiedTranslated);
+                        company = IOmanager.getCompanyFromFile(CompanyFilename);
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
+
+                }
+            }
         }
     };
-
-
 
     ActionListener deleteButtonAction = new ActionListener() {
 

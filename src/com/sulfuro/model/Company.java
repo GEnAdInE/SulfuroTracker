@@ -7,18 +7,14 @@ import java.util.List;
 public class Company implements Serializable {
     private List<Employee> company;
 
-    public Company(){
-        company = new ArrayList<Employee>();
-    }
+    public Company(){ company = new ArrayList<Employee>(); }
     public List<Employee> getCompany() {
         return company;
-    }
-    public void setCompany(List<Employee> company) {
-        this.company = company;
     }
     public void add(Employee employee) {
         company.add(employee);
     }
+    public void remove(Employee employee) { company.remove(employee); }
     public boolean checkIdNotUsed(Employee employee){
         for(Employee e: company){
             if(e.getId() == employee.getId()){
@@ -35,5 +31,13 @@ public class Company implements Serializable {
             }
         }
         return employeeDataTable;
+    }
+    public Employee getEmployeeByID(int ID){
+        for(Employee employee: this.getCompany()){
+            if(employee.getId() == ID){
+                return employee;
+            }
+        }
+        return null;
     }
 }

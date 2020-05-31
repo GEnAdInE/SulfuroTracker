@@ -21,6 +21,8 @@ public class TrackerServGUI extends JFrame {
     private JTextField FirstnameModifyTextfield;
     private JButton deleteButton;
     private JTextField idDeleteTextfield;
+    private JTextField oldIDModifyTextField;
+    private JTextField textField1;
     private JTable TrackerInputs;
     private JTable TrackerEmployees;
 
@@ -73,12 +75,10 @@ public class TrackerServGUI extends JFrame {
         return AddButton;
     }
 
-    public JTextField getIdDeleteTextfield() {
-        return idDeleteTextfield;
-    }
+    public JTextField getOldIDModifyTextField() { return oldIDModifyTextField; }
 
-    public JButton getDeleteButton() {
-        return deleteButton;
+    public JTextField getIdModifyTextfield() {
+        return idModifyTextfield;
     }
 
     public JTextField getFirstnameModifyTextfield() {
@@ -93,7 +93,12 @@ public class TrackerServGUI extends JFrame {
         return modifyButton;
     }
 
-    public JTextField getIdModifyTextfield() {
-        return idModifyTextfield;
+
+    public JTextField getIdDeleteTextfield() {
+        return idDeleteTextfield;
+    }
+
+    public JButton getDeleteButton() {
+        return deleteButton;
     }
 }

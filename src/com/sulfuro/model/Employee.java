@@ -24,17 +24,34 @@ public class Employee implements Serializable, Comparable<Employee> {
     public int getId() {
         return id;
     }
-    public String getName() {
-        return name;
-    }
-    public String getFirstname() {
-        return firstname;
-    }
+    @Override
     public String toString(){
         return this.name + " " + this.firstname;
     }
     @Override
     public int compareTo(Employee employee) {
         return this.toString().compareTo(employee.toString());
+    }
+    @Override
+    public boolean equals(Object o) {
+
+        // If the object is compared with itself then return true
+        if (o == this) {
+            return true;
+        }
+
+        /* Check if o is an instance of Complex or not
+          "null instanceof [type]" also returns false */
+        if (!(o instanceof Employee)) {
+            return false;
+        }
+
+        // typecast o to Complex so that we can compare data members
+        Employee c = (Employee) o;
+
+        if(this.getId() == c.getId() && this.toString().equals(c.toString())){
+            return true;
+        }
+        return false;
     }
 }
