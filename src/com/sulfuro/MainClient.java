@@ -18,10 +18,10 @@ public class MainClient {
        com.sulfuro.model.Time  t1 = new Time(17,10);
        Time t3 = new Time();
 
-        System.out.println(Time.timeToString(t0));
-        System.out.println(Time.timeToString(t1));
-        t3.getCalendar().setTimeInMillis(t1.getCalendar().getTimeInMillis()-t0.getCalendar().getTimeInMillis());
-        System.out.println(Time.timeToString(t3));
+        System.out.println(Time.TimeToString(t0));
+        System.out.println(Time.TimeToString(t1));
+        t3 = Time.Substraction(t0,t1);
+        System.out.println(Time.TimeToString(t3));
 
     }
 }

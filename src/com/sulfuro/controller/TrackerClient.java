@@ -10,7 +10,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.URI;
@@ -68,7 +67,7 @@ public class TrackerClient {
 
 
             StringBuilder roundedTime = new StringBuilder();
-            roundedTime.append("Let's say : ").append(time.timeToString(time.getRoundedTime()));
+            roundedTime.append("Let's say : ").append(time.TimeToString(time.getRoundedTime()));
             view.getTimeRoundedLabel().setText(roundedTime.toString());
         }
     };
@@ -102,7 +101,7 @@ public class TrackerClient {
                 StringBuilder str = new StringBuilder();
                 if(SendData(data))
                 {
-                    str.append(Id).append(" Cheked in/out at ").append(time.timeToString(data.getTime()));
+                    str.append(Id).append(" Cheked in/out at ").append(time.TimeToString(data.getTime()));
                     JOptionPane.showMessageDialog(view, str.toString(), "Information", JOptionPane.INFORMATION_MESSAGE);
                 }
                 else

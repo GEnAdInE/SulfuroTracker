@@ -3,7 +3,6 @@ package com.sulfuro.model;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
@@ -56,7 +55,7 @@ public class Time implements Serializable {
      */
     public String getTime()
     {
-        return timeToString(this);
+        return TimeToString(this);
     }
     /**
      * Fully Rounded time to get send to the server
@@ -76,7 +75,7 @@ public class Time implements Serializable {
     }
     /**
      * Calculate the rounded time to 15min into a new Calendar
-     * @return Calendar of the rounded time
+     * @return Time of the rounded time
      */
     public Time getRoundedTime()
     {
@@ -89,11 +88,11 @@ public class Time implements Serializable {
 
     /**
      * Convert hours and minute to a string but with a calendar
-     * @param c Calendar of the time to be converted to string
+     * @param t Calendar of the time to be converted to string
      * @return String hours:minute
      * @exemple timeToString(calendar) -> 10h05
      */
-    static public String timeToString(Time t)
+    static public String TimeToString(Time t)
     {
         StringBuilder str = new StringBuilder();
         if(t.getHour()<10)
@@ -127,6 +126,15 @@ public class Time implements Serializable {
         if(m>=0) {
             calendar.set(Calendar.MINUTE, m);
         }
+    }
+
+
+
+    public static Time Substraction(Time t0 , Time t1)
+    {
+        Time result = new Time();
+        result.getCalendar().setTimeInMillis(t0.getCalendar().getTimeInMillis() - t1.getCalendar().getTimeInMillis());
+        return result;
     }
 
     public int getDay()
