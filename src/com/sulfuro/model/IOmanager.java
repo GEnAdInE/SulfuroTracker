@@ -92,19 +92,39 @@ public class IOmanager {
     }
 
     public static void writeCompanyToFile(String filename, Employee employee) throws Exception {
-
-
         Company companyTable;
-
         try
         {
             companyTable = IOmanager.getCompanyFromFile(filename);
-
             if(companyTable.checkIdNotUsed(employee)){
                 companyTable.add(employee);
             } else {
                 throw new Exception("ID ALREADY USED COULDNT CREATE USER");
             }
+            Collections.sort(companyTable.getCompany());
+
+            FileOutputStream file = new FileOutputStream(filename);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+
+            out.writeObject(companyTable);
+
+            out.close();
+            file.close();
+            System.out.println("WROTE C");
+        }
+
+        catch(IOException ex) {
+            System.out.println("Writing IOException is caught");
+        }
+    }
+    public static void modifyCompanyToFile(String filename, Employee oldEmployee, Employee employee) throws Exception {
+        Company companyTable;
+        try
+        {
+            companyTable = IOmanager.getCompanyFromFile(filename);
+            companyTable.remove(oldEmployee);
+            companyTable.add(employee);
+
             Collections.sort(companyTable.getCompany());
 
             FileOutputStream file = new FileOutputStream(filename);
