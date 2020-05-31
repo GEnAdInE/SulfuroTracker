@@ -21,6 +21,11 @@ public class TrackerServGUI extends JFrame {
     private JTextField FirstnameModifyTextfield;
     private JButton deleteButton;
     private JTextField idDeleteTextfield;
+    private JTextField endTimeAddTextfield;
+    private JTextField startTimeAddTextfield;
+    private JLabel endTimeLabel;
+    private JTextField startTimeModifyTextfield;
+    private JTextField endTimeModifyTextfield;
     private JTextField oldIDModifyTextField;
     private JTextField textField1;
     private JTable TrackerInputs;
@@ -80,6 +85,13 @@ public class TrackerServGUI extends JFrame {
     public JTextField getIdModifyTextfield() {
         return idModifyTextfield;
     }
+    public JTextField getIdDeleteTextfield() {
+        return idDeleteTextfield;
+    }
+
+    public JButton getDeleteButton() {
+        return deleteButton;
+    }
 
     public JTextField getFirstnameModifyTextfield() {
         return FirstnameModifyTextfield;
@@ -94,11 +106,19 @@ public class TrackerServGUI extends JFrame {
     }
 
 
-    public JTextField getIdDeleteTextfield() {
-        return idDeleteTextfield;
+    public JTextField getEndTimeAddTextfield() {
+        return endTimeAddTextfield;
     }
 
-    public JButton getDeleteButton() {
-        return deleteButton;
+    public JTextField getStartTimeAddTextfield() {
+        return startTimeAddTextfield;
+    }
+
+    public JTextField getStartTimeModifyTextfield() {
+        return startTimeModifyTextfield;
+    }
+
+    public JTextField getEndTimeModifyTextfield() {
+        return endTimeModifyTextfield;
     }
 }

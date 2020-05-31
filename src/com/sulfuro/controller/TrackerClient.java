@@ -45,7 +45,7 @@ public class TrackerClient {
 
 
     /**
-     * update the view (time)
+     * update the view (time) every seconds
      */
     public void updateView() {
 
@@ -129,9 +129,7 @@ public class TrackerClient {
                 URI uri = new URI("my://" + value);
                 ip = uri.getHost();
                 port = uri.getPort();
-                //tester la connection
-                //POP UP status of the connection
-                //si ca marche envoyer les donnés stocker dans le fichier
+
                 File f = new File(filename);
                 if(f.exists())
                 {
