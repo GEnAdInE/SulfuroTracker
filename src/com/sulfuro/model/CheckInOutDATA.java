@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 public class CheckInOutDATA implements Serializable {
 
-    private Time time; //passer en Time ca serait mieux
+    private Time time;
     private int id;
 
     /**

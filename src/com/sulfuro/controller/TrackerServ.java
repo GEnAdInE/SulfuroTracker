@@ -33,6 +33,7 @@ public class TrackerServ implements Runnable{
     private volatile JPanel MainPanel;
     private volatile JTable TrackerInputs;
     private volatile JTable TrackerEmployees;
+    private volatile JTable TrackerEmployeesVisualize;
     private volatile String InputsFilename;
     private volatile String CompanyFilename;
     private volatile Company company;
@@ -217,16 +218,16 @@ public class TrackerServ implements Runnable{
         visualize.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                int ID = TrackerEmployees.getSelectedRow();
-                //JOptionPane.showMessageDialog(MainPanel, "Right-click performed on row " + ID +" and choose Infos");
-                Object[][] rows = {
-                        {ID,"Dupont","9h00","17h00","00h30"}
-                };
-                Object[] cols = {
-                        "ID","Name","Start Time","End time","Bonus time"
-                };
-                JTable exempleTable = new JTable(rows, cols);
-                JOptionPane.showMessageDialog(MainPanel, new JScrollPane(exempleTable));
+                int selectedRow = TrackerEmployees.getSelectedRow();
+                int ID = Integer.parseInt(TrackerEmployees.getValueAt(selectedRow, 0).toString());
+                Employee employee = company.getEmployeeByID(ID);
+                CheckInOutCompanyDATATable dataTable = IOmanager.getCompanyDataFromFile(InputsFilename);
+                CheckInOutCompanyDATATable employeeDataTable = company.getEmployeeDataTable(employee, dataTable);
+                TrackerVisualizeEmployeeInit();
+                for(CheckInOutCompanyDATA data: employeeDataTable.getTable()){
+                    TrackerEmployeeVisualizeAddData(data);
+                }
+                JOptionPane.showMessageDialog(MainPanel, new JScrollPane(TrackerEmployeesVisualize));
             }
         });
         popupMenu.add(visualize);
@@ -255,7 +256,6 @@ public class TrackerServ implements Runnable{
         int id = employee.getId();
 
         String idData = Integer.toString(id);
-        String name = employee.toString();
 
         for (int i = model.getRowCount() - 1; i >= 0; --i) {
             if (model.getValueAt(i, 0).equals(idData)) {
@@ -269,14 +269,48 @@ public class TrackerServ implements Runnable{
             TrackerEmployeeAddData(employee);
         }
     }
+    public void TrackerVisualizeEmployeeInit(){
+        DefaultTableModel tableModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        tableModel.addColumn("ID");
+        tableModel.addColumn("NOM-PRENOM");
+        tableModel.addColumn("HEURE");
+        tableModel.addColumn("BONUS TIME");
 
+        TrackerEmployeesVisualize=new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(TrackerEmployeesVisualize);
+        TrackerEmployeesVisualize.setFillsViewportHeight(true);
+        serverGUI.getTabs().setComponentAt(0, scrollPane);
+    }
+    public void TrackerEmployeeVisualizeAddData(CheckInOutCompanyDATA received){
+
+        DefaultTableModel model = (DefaultTableModel) TrackerEmployeesVisualize.getModel();
+
+        int id = received.getEmployee().getId();
+        String idData = Integer.toString(id);
+        String name = received.getEmployee().toString();
+
+        int year = received.getData().getTime().getYear();
+        int month = received.getData().getTime().getMonth() + 1;
+        int day = received.getData().getTime().getDay();
+        int hour = received.getData().getTime().getHour();
+        int minute = received.getData().getTime().getMinute();
+
+        String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
+
+        model.addRow(new Object[]{idData, name, timeData, "NOT IMPLEMENTED"});
+
+    }
     ActionListener validButtonAction = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (!serverGUI.getTextPort().getText().isEmpty()) {
                 try {
                     port = Integer.parseInt(serverGUI.getTextPort().getText());
-                    // ne semble pas marcher
                     terminate();
                     server = new ServerSocket(port);
                     Thread receptionThread = new Thread(String.valueOf(this));

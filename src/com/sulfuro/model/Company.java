@@ -23,10 +23,10 @@ public class Company implements Serializable {
         }
         return true;
     }
-    public CheckInOutDATATable getEmployeeDataTable(Employee employee, CheckInOutDATATable dataTable){
-        CheckInOutDATATable employeeDataTable = new CheckInOutDATATable();
-        for(CheckInOutDATA data: dataTable.getTable()){
-            if(data.getId() == employee.getId()){
+    public CheckInOutCompanyDATATable getEmployeeDataTable(Employee employee, CheckInOutCompanyDATATable dataTable){
+        CheckInOutCompanyDATATable employeeDataTable = new CheckInOutCompanyDATATable();
+        for(CheckInOutCompanyDATA data: dataTable.getTable()){
+            if(data.getEmployee().getId() == employee.getId()){
                 employeeDataTable.add(data);
             }
         }
