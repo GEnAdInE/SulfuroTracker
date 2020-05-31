@@ -1,5 +1,6 @@
 package com.sulfuro.model;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.text.SimpleDateFormat;
@@ -9,7 +10,7 @@ import java.util.GregorianCalendar;
 /**
  * Custom class time
  */
-public class Time {
+public class Time implements Serializable {
     private Calendar calendar;
 
 
@@ -55,7 +56,7 @@ public class Time {
      */
     public String getTime()
     {
-        return timeToString(calendar);
+        return timeToString(this);
     }
     /**
      * Fully Rounded time to get send to the server
@@ -64,12 +65,12 @@ public class Time {
     public ArrayList<Integer> getFullyRoundedTime()
     {
         ArrayList<Integer> arrayTime = new ArrayList<Integer>();
-        Calendar c = getRoundedTime();
-        arrayTime.add(c.get(Calendar.YEAR));
-        arrayTime.add(c.get(Calendar.MONTH));
-        arrayTime.add(c.get(Calendar.DAY_OF_MONTH));
-        arrayTime.add(c.get(Calendar.HOUR_OF_DAY));
-        arrayTime.add(c.get(Calendar.MINUTE));
+        Time c = getRoundedTime();
+        arrayTime.add(c.getYear());
+        arrayTime.add(c.getMonth());
+        arrayTime.add(c.getDay());
+        arrayTime.add(c.getHour());
+        arrayTime.add(c.getMinute());
         return arrayTime;
 
     }
@@ -77,14 +78,13 @@ public class Time {
      * Calculate the rounded time to 15min into a new Calendar
      * @return Calendar of the rounded time
      */
-    public Calendar getRoundedTime()
+    public Time getRoundedTime()
     {
-        Calendar c = calendar;
+        Time result = new Time();
+        int mod = result.getMinute() % 15;
+        result.getCalendar().add(Calendar.MINUTE,mod < 8 ? -mod : (15-mod));
+        return result;
 
-        int mod = getMinute() % 15;
-        c.add(Calendar.MINUTE,mod < 8 ? -mod : (15-mod));
-
-        return c;
     }
 
     /**
@@ -93,15 +93,15 @@ public class Time {
      * @return String hours:minute
      * @exemple timeToString(calendar) -> 10h05
      */
-    public String timeToString(Calendar c)
+    static public String timeToString(Time t)
     {
         StringBuilder str = new StringBuilder();
-        if(c.get(Calendar.HOUR_OF_DAY)<10)
+        if(t.getHour()<10)
             str.append("0");
-        str.append(c.get(Calendar.HOUR_OF_DAY)).append(':');
-        if(c.get(Calendar.MINUTE)<10)
+        str.append(t.getHour()).append(':');
+        if(t.getMinute()<10)
             str.append("0");
-        str.append(c.get(Calendar.MINUTE));
+        str.append(t.getMinute());
         return str.toString();
 
     }

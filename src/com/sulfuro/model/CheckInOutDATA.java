@@ -5,7 +5,7 @@ import java.util.Calendar;
 
 public class CheckInOutDATA implements Serializable {
 
-    private Calendar time; //passer en Time ca serait mieux
+    private Time time; //passer en Time ca serait mieux
     private int id;
 
     /**
@@ -13,7 +13,7 @@ public class CheckInOutDATA implements Serializable {
      * @param t time of the check in/out , use time.GetRoudedTime()
      * @param i id of the worker from the textField
      */
-    public CheckInOutDATA(Calendar t , int i)
+    public CheckInOutDATA(Time t , int i)
     {
         time = t;
         id = i;
@@ -24,7 +24,7 @@ public class CheckInOutDATA implements Serializable {
         return id;
     }
 
-    public Calendar getTime()
+    public Time getTime()
     {
         return time;
     }

@@ -131,11 +131,11 @@ public class TrackerServ implements Runnable{
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
 
         int id = received.getEmployee().getId();
-        int year = received.getData().getTime().get(Calendar.YEAR);
-        int month = received.getData().getTime().get(Calendar.MONTH) + 1;
-        int day = received.getData().getTime().get(Calendar.DAY_OF_MONTH);
-        int hour = received.getData().getTime().get(Calendar.HOUR_OF_DAY);
-        int minute = received.getData().getTime().get(Calendar.MINUTE);
+        int year = received.getData().getTime().getYear();
+        int month = received.getData().getTime().getMonth() + 1;
+        int day = received.getData().getTime().getDay();
+        int hour = received.getData().getTime().getHour();
+        int minute = received.getData().getTime().getMinute();
 
         String idData = Integer.toString(id);
         String name = received.getEmployee().toString();
@@ -149,11 +149,11 @@ public class TrackerServ implements Runnable{
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
 
         int id = received.getEmployee().getId();
-        int year = received.getData().getTime().get(Calendar.YEAR);
-        int month = received.getData().getTime().get(Calendar.MONTH) + 1;
-        int day = received.getData().getTime().get(Calendar.DAY_OF_MONTH);
-        int hour = received.getData().getTime().get(Calendar.HOUR_OF_DAY);
-        int minute = received.getData().getTime().get(Calendar.MINUTE);
+        int year = received.getData().getTime().getYear();
+        int month = received.getData().getTime().getMonth() + 1;
+        int day = received.getData().getTime().getDay();
+        int hour = received.getData().getTime().getHour();
+        int minute = received.getData().getTime().getMinute();
 
         String idData = Integer.toString(id);
         String name = received.getEmployee().toString();
@@ -242,11 +242,11 @@ public class TrackerServ implements Runnable{
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
 
         int id = employee.getId();
-        int year = received.getTime().get(Calendar.YEAR);
-        int month = received.getTime().get(Calendar.MONTH) + 1;
-        int day = received.getTime().get(Calendar.DAY_OF_MONTH);
-        int hour = received.getTime().get(Calendar.HOUR_OF_DAY);
-        int minute = received.getTime().get(Calendar.MINUTE);
+        int year = received.getTime().getYear();
+        int month = received.getTime().getMonth() + 1;
+        int day = received.getTime().getDay();
+        int hour = received.getTime().getHour();
+        int minute = received.getTime().getMinute();
 
         String idData = Integer.toString(id);
         String employeeInfos = employee.toString();
