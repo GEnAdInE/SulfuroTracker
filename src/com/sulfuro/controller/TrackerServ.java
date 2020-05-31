@@ -48,6 +48,17 @@ public class TrackerServ implements Runnable{
         InputsFilename = "InOutServerDB.ser";
         CompanyFilename = "CompanyServerDB.ser";
 
+
+        serverGUI.getComboBoxAdd().addItem("Test0");
+        serverGUI.getComboBoxAdd().addItem("Test1");
+        serverGUI.getComboBoxAdd().addItem("Test2");
+
+        serverGUI.getComboBoxModify().addItem("Test0");
+        serverGUI.getComboBoxModify().addItem("Test1");
+        serverGUI.getComboBoxModify().addItem("Test2");
+
+
+
         CheckInOutCompanyDATATable data = IOmanager.getCompanyDataFromFile(InputsFilename);
         company = IOmanager.getCompanyFromFile(CompanyFilename);
 
@@ -242,13 +253,7 @@ public class TrackerServ implements Runnable{
         DefaultTableModel model = (DefaultTableModel) TrackerEmployees.getModel();
 
         int id = employee.getId();
-        /*
-        int year = received.getTime().getYear();
-        int month = received.getTime().getMonth() + 1;
-        int day = received.getTime().getDay();
-        int hour = received.getTime().getHour();
-        int minute = received.getTime().getMinute();
-        */
+
         String idData = Integer.toString(id);
         String name = employee.toString();
 

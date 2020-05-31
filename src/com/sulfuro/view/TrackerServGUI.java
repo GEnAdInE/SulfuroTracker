@@ -27,6 +27,8 @@ public class TrackerServGUI extends JFrame {
     private JTextField startTimeModifyTextfield;
     private JTextField endTimeModifyTextfield;
     private JTextField oldIDModifyTextField;
+    private JComboBox comboBoxAdd;
+    private JComboBox comboBoxModify;
     private JTable TrackerInputs;
     private JTable TrackerEmployees;
 
@@ -121,5 +123,22 @@ public class TrackerServGUI extends JFrame {
 
     public JTextField getEndTimeModifyTextfield() {
         return endTimeModifyTextfield;
+    }
+
+
+    public JComboBox getComboBoxAdd() {
+        return comboBoxAdd;
+    }
+
+    public void setComboBoxAdd(JComboBox comboBoxAdd) {
+        this.comboBoxAdd = comboBoxAdd;
+    }
+
+    public JComboBox getComboBoxModify() {
+        return comboBoxModify;
+    }
+
+    public void setComboBoxModify(JComboBox comboBoxModify) {
+        this.comboBoxModify = comboBoxModify;
     }
 }
