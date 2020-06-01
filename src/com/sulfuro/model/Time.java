@@ -22,6 +22,12 @@ public class Time implements Serializable {
         calendar = new GregorianCalendar();
         negativeTime = false;
     }
+
+    /**
+     * Time constructor with specific hours and minuyte
+     * @param h hours
+     * @param m minute
+     */
     public Time(int h,int m)
     {
         calendar = new GregorianCalendar();
@@ -30,6 +36,9 @@ public class Time implements Serializable {
         negativeTime = false;
     }
 
+    /**
+     * Set the current Time to 0
+     */
     public void emptyTime()
     {
         calendar.set(Calendar.YEAR,0);
@@ -65,7 +74,7 @@ public class Time implements Serializable {
     /**
      * Get the current time
      * @return string of the time
-     * @exemple 10:35
+     *
      */
     public String getTime()
     {
@@ -104,7 +113,7 @@ public class Time implements Serializable {
      * Convert hours and minute to a string but with a calendar
      * @param t Calendar of the time to be converted to string
      * @return String hours:minute
-     * @exemple timeToString(calendar) -> 10h05
+     *  timeToString(calendar) : 10h05
      */
     static public String TimeToString(Time t)
     {
@@ -126,7 +135,7 @@ public class Time implements Serializable {
 
     /**
      * set a specific hour
-     * @param h
+     * @param h hour
      */
     public void setHour(int h)
     {
@@ -138,7 +147,7 @@ public class Time implements Serializable {
 
     /**
      * set a specific minute
-     * @param m
+     * @param m minute
      */
     public void setMinute(int m)
     {
@@ -148,29 +157,70 @@ public class Time implements Serializable {
     }
 
 
-
+    /**
+     * Allow you to do Time0 - Time1
+     * @param t0 time0
+     * @param t1 time1
+     * @return new time = time0-time1
+     */
     public static Time Substraction(Time t0 , Time t1)
     {
         Time result = new Time();
         result.emptyTime();
-        int day = result.getDay();
-        long defaultTime = result.getCalendar().getTimeInMillis();
-        result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()-t1.getHour());
-        result.getCalendar().add(Calendar.MINUTE,t0.getMinute()-t1.getMinute());
 
-        if(day != result.getDay())
-        {
-            long test = defaultTime-result.getCalendar().getTimeInMillis();
-            result.emptyTime();
-            result.getCalendar().setTimeInMillis(test);
-            result.getCalendar().add(Calendar.HOUR_OF_DAY,-1);
-            result.negativeTime = true;
+
+
+        if(t0.negativeTime == false && t1.negativeTime ==false) {
+            int day = result.getDay();
+            long defaultTime = result.getCalendar().getTimeInMillis();
+            result.getCalendar().add(Calendar.HOUR_OF_DAY, t0.getHour() - t1.getHour());
+            result.getCalendar().add(Calendar.MINUTE, t0.getMinute() - t1.getMinute());
+
+            if (day != result.getDay()) {
+                long test = defaultTime - result.getCalendar().getTimeInMillis();
+                result.emptyTime();
+                result.getCalendar().setTimeInMillis(test);
+                result.getCalendar().add(Calendar.HOUR_OF_DAY, -1);
+                result.negativeTime = true;
+                return result;
+            }
         }
+        if(t0.negativeTime == false && t1.negativeTime == true)
+        {
+            t1.negativeTime = false;
+            Time res = Time.Addition(t0,t1);
+            t1.negativeTime = true;
+            return res;
+        }
+
+        if(t0.negativeTime == true && t1.negativeTime == false) {
+
+            t1.negativeTime = false;
+            Time res = Time.Addition(t0,t1);
+            t1.negativeTime = true;
+            return res;
+        }
+
+        if(t0.negativeTime == true && t1.negativeTime == true) {
+            t1.negativeTime = false;
+            Time res = Time.Addition(t0,t1);
+            t1.negativeTime = true;
+            res.negativeTime = true;
+            return res;
+        }
+
+
 
         return result;
     }
 
 
+    /**
+     * Allow you to do Time0 + Time1
+     * @param t0 time0
+     * @param t1 time1
+     * @return new time = time0+time1
+     */
     public static Time Addition(Time t0,Time t1)
     {
         Time result = new Time();
@@ -179,11 +229,19 @@ public class Time implements Serializable {
 
         if(t0.negativeTime == true && t1.negativeTime ==false)
         {
-            return Time.Substraction(t1,t0);
+            t0.negativeTime = false;
+            Time res = Time.Substraction(t1,t0);
+            t0.negativeTime = true;
+            return res;
+
         }
         if(t0.negativeTime == false && t1.negativeTime == true)
         {
-            return Time.Substraction(t0,t1);
+            t1.negativeTime = false;
+            Time res = Time.Substraction(t0,t1);
+            t1.negativeTime = true;
+            return res;
+
         }
         if(t0.negativeTime == true && t1.negativeTime == true)
         {
@@ -202,35 +260,60 @@ public class Time implements Serializable {
         return result;
     }
 
+    /**
+     * Day getter
+     * @return day
+     */
     public int getDay()
     {
         return calendar.get(Calendar.DAY_OF_MONTH);
     }
+
+    /**
+     * Month getter
+     * @return month
+     */
     public int getMonth()
     {
         return calendar.get(Calendar.MONTH);
     }
 
+    /**
+     * Get hour
+     * @return hour
+     */
     public int getHour() {
         return calendar.get(Calendar.HOUR_OF_DAY);
     }
 
+    /**
+     * Get minute
+     * @return minute
+     */
     public int getMinute()
     {
         return calendar.get(Calendar.MINUTE);
     }
 
+    /**
+     * Get year
+     * @return year
+     */
     public int getYear()
     {
         return calendar.get(Calendar.YEAR);
     }
 
+    /**
+     * Get calendar
+     * @return calendar
+     */
     public Calendar getCalendar()
     {
         return calendar;
     }
 
-    public Boolean isNegativeTime() {
+    public Boolean getNegativeTime() {
         return negativeTime;
     }
 }
