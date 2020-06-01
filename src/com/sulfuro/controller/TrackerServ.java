@@ -120,7 +120,6 @@ public class TrackerServ implements Runnable{
                 Employee oldTranslated = new Employee(translated.getEmployee());
                 translated.getEmployee().setWorking(!translated.getEmployee().getIsWorking());
                 Time supposedWorkingTime = Time.Substraction(translated.getEmployee().getEndTime(), translated.getEmployee().getStartTime());
-                System.out.println(Time.TimeToString(supposedWorkingTime));
                 if(!translated.getEmployee().getIsWorking()){
                     CheckInOutCompanyDATATable dataTable = IOmanager.getCompanyDataFromFile(InputsFilename);
                     Time LastTimeWorking = company.getEmployeeLastWordkingDATA(translated.getEmployee(), dataTable).getData().getTime();
@@ -129,6 +128,7 @@ public class TrackerServ implements Runnable{
                     System.out.println("LST : " + Time.TimeToString(LastTimeWorking));
                     System.out.println("ACT : " + Time.TimeToString(ActualTime));
                     System.out.println("WRK : " + Time.TimeToString(workedTime));
+                    System.out.println("SWK : " + Time.TimeToString(supposedWorkingTime));
                     Time bonusTime = Time.Substraction(workedTime, supposedWorkingTime);
                     System.out.println("BNS : " + Time.TimeToString(bonusTime));
                     translated.getEmployee().setBonusTime(Time.Addition(translated.getEmployee().getBonusTime(),bonusTime));
