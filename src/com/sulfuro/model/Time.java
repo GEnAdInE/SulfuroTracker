@@ -109,9 +109,11 @@ public class Time implements Serializable {
     static public String TimeToString(Time t)
     {
         StringBuilder str = new StringBuilder();
-        if(t.isNegativeTime()){
-            str.append("-");
+        if(t.negativeTime == true)
+        {
+            str.append("- ");
         }
+
         if(t.getHour()<10)
             str.append("0");
         str.append(t.getHour()).append(':');
@@ -152,13 +154,13 @@ public class Time implements Serializable {
         Time result = new Time();
         result.emptyTime();
         int day = result.getDay();
-        long debug = result.getCalendar().getTimeInMillis();
+        long defaultTime = result.getCalendar().getTimeInMillis();
         result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()-t1.getHour());
         result.getCalendar().add(Calendar.MINUTE,t0.getMinute()-t1.getMinute());
 
         if(day != result.getDay())
         {
-            long test = debug-result.getCalendar().getTimeInMillis();
+            long test = defaultTime-result.getCalendar().getTimeInMillis();
             result.emptyTime();
             result.getCalendar().setTimeInMillis(test);
             result.getCalendar().add(Calendar.HOUR_OF_DAY,-1);
@@ -175,10 +177,28 @@ public class Time implements Serializable {
         result.emptyTime();
 
 
-        result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()+t1.getHour());
-        result.getCalendar().add(Calendar.MINUTE,t0.getMinute()+t1.getMinute());
+        if(t0.negativeTime == true && t1.negativeTime ==false)
+        {
+            return Time.Substraction(t1,t0);
+        }
+        if(t0.negativeTime == false && t1.negativeTime == true)
+        {
+            return Time.Substraction(t0,t1);
+        }
+        if(t0.negativeTime == true && t1.negativeTime == true)
+        {
 
-
+            result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()+t1.getHour());
+            result.getCalendar().add(Calendar.MINUTE,t0.getMinute()+t1.getMinute());
+            result.negativeTime = true;
+            return result;
+        }
+        if(t0.negativeTime == false && t1.negativeTime == false)
+        {
+            result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()+t1.getHour());
+            result.getCalendar().add(Calendar.MINUTE,t0.getMinute()+t1.getMinute());
+            return result;
+        }
         return result;
     }
 
