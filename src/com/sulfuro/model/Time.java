@@ -27,6 +27,17 @@ public class Time implements Serializable {
         calendar.set(Calendar.MINUTE,m);
     }
 
+    public void emptyTime()
+    {
+        calendar.set(Calendar.YEAR,0);
+        calendar.set(Calendar.MONTH,0);
+        calendar.set(Calendar.DAY_OF_MONTH,0);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+    }
+
     /**
      * Get the current date
      * @return string version of the date with (st,nd,rd,th)
@@ -133,14 +144,19 @@ public class Time implements Serializable {
     public static Time Substraction(Time t0 , Time t1)
     {
         Time result = new Time();
-        result.getCalendar().setTimeInMillis(t0.getCalendar().getTimeInMillis() - t1.getCalendar().getTimeInMillis());
+        result.emptyTime();
+
+        result.getCalendar().add(Calendar.MILLISECOND,(int)(t0.getCalendar().getTimeInMillis() - t1.getCalendar().getTimeInMillis()));
         return result;
     }
 
     public static Time Addition(Time t0,Time t1)
     {
         Time result = new Time();
-        result.getCalendar().setTimeInMillis(t0.getCalendar().getTimeInMillis() + t1.getCalendar().getTimeInMillis());
+        result.emptyTime();
+        result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()+t1.getHour());
+        result.getCalendar().add(Calendar.MINUTE,t0.getMinute()+t1.getMinute());
+
         return result;
     }
 
