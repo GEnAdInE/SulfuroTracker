@@ -14,8 +14,8 @@ public class MainClient {
 
 
 
-        com.sulfuro.model.Time t0 = new Time(2,20);
-       com.sulfuro.model.Time  t1 = new Time(1,10);
+        com.sulfuro.model.Time t0 = new Time(23,00);
+       com.sulfuro.model.Time  t1 = new Time(10,00);
        Time t3;
 
         System.out.println(Time.TimeToString(t0));
