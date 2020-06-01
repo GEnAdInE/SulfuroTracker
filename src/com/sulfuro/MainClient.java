@@ -14,7 +14,7 @@ public class MainClient {
 
 
 
-        com.sulfuro.model.Time t0 = new Time(00,00);
+        com.sulfuro.model.Time t0 = new Time(02,00);
        com.sulfuro.model.Time  t1 = new Time(10,00);
        Time t3;
        Time t4;
@@ -23,7 +23,7 @@ public class MainClient {
         System.out.println(Time.TimeToString(t1));
         t3 = Time.Substraction(t0,t1);
         System.out.println(Time.TimeToString(t3));
-        t4 = Time.Substraction(t3,t3);
+        t4 = Time.Addition(t0,t3);
         System.out.println(Time.TimeToString(t4));
 
     }

@@ -153,19 +153,49 @@ public class Time implements Serializable {
     {
         Time result = new Time();
         result.emptyTime();
-        int day = result.getDay();
-        long defaultTime = result.getCalendar().getTimeInMillis();
-        result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()-t1.getHour());
-        result.getCalendar().add(Calendar.MINUTE,t0.getMinute()-t1.getMinute());
 
-        if(day != result.getDay())
-        {
-            long test = defaultTime-result.getCalendar().getTimeInMillis();
-            result.emptyTime();
-            result.getCalendar().setTimeInMillis(test);
-            result.getCalendar().add(Calendar.HOUR_OF_DAY,-1);
-            result.negativeTime = true;
+
+
+        if(t0.negativeTime == false && t1.negativeTime ==false) {
+            int day = result.getDay();
+            long defaultTime = result.getCalendar().getTimeInMillis();
+            result.getCalendar().add(Calendar.HOUR_OF_DAY, t0.getHour() - t1.getHour());
+            result.getCalendar().add(Calendar.MINUTE, t0.getMinute() - t1.getMinute());
+
+            if (day != result.getDay()) {
+                long test = defaultTime - result.getCalendar().getTimeInMillis();
+                result.emptyTime();
+                result.getCalendar().setTimeInMillis(test);
+                result.getCalendar().add(Calendar.HOUR_OF_DAY, -1);
+                result.negativeTime = true;
+                return result;
+            }
         }
+        if(t0.negativeTime == false && t1.negativeTime == true)
+        {
+            t1.negativeTime = false;
+            Time res = Time.Addition(t0,t1);
+            t1.negativeTime = true;
+            return res;
+        }
+
+        if(t0.negativeTime == true && t1.negativeTime == false) {
+
+            t1.negativeTime = false;
+            Time res = Time.Addition(t0,t1);
+            t1.negativeTime = true;
+            return res;
+        }
+
+        if(t0.negativeTime == true && t1.negativeTime == true) {
+            t1.negativeTime = false;
+            Time res = Time.Addition(t0,t1);
+            t1.negativeTime = true;
+            res.negativeTime = true;
+            return res;
+        }
+
+
 
         return result;
     }
@@ -179,11 +209,19 @@ public class Time implements Serializable {
 
         if(t0.negativeTime == true && t1.negativeTime ==false)
         {
-            return Time.Substraction(t1,t0);
+            t0.negativeTime = false;
+            Time res = Time.Substraction(t1,t0);
+            t0.negativeTime = true;
+            return res;
+
         }
         if(t0.negativeTime == false && t1.negativeTime == true)
         {
-            return Time.Substraction(t0,t1);
+            t1.negativeTime = false;
+            Time res = Time.Substraction(t0,t1);
+            t1.negativeTime = true;
+            return res;
+
         }
         if(t0.negativeTime == true && t1.negativeTime == true)
         {
