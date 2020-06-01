@@ -28,8 +28,9 @@ public class TrackerClient {
      * Constructor of the controller for the view
      * Initialised with the default IP:PORT configuration
      * @param v take the view as argument to set the value
+     *
      */
-    public TrackerClient(TrackerGUI v) throws Exception {
+    public TrackerClient(TrackerGUI v){
         view = v;
         ip = null;
         port = 0;
@@ -37,8 +38,6 @@ public class TrackerClient {
 
         view.getSendButton().addActionListener(sendButtonAction);
         view.getSettingsButton().addActionListener(settingsButtonAction);
-
-
 
     }
 

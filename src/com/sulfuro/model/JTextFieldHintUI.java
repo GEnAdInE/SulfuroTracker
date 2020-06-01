@@ -7,21 +7,36 @@ import java.awt.event.FocusListener;
 import javax.swing.plaf.basic.BasicTextFieldUI;
 import javax.swing.text.JTextComponent;
 
+/**
+ * Hint for UI textField (found on internet)
+ */
 public class JTextFieldHintUI extends BasicTextFieldUI implements FocusListener {
     private String hint;
     private Color  hintColor;
 
+    /**
+     * Hint constructor
+     * @param hint text you want
+     * @param hintColor color
+     */
     public JTextFieldHintUI(String hint, Color hintColor) {
         this.hint = hint;
         this.hintColor = hintColor;
     }
 
+    /**
+     * Update the value as fast as possible
+     */
     private void repaint() {
         if (getComponent() != null) {
             getComponent().repaint();
         }
     }
 
+    /**
+     * Render the text field UI
+     * @param g the graphics
+     */
     @Override
     protected void paintSafely(Graphics g) {
         // Render the default text field UI
@@ -35,6 +50,7 @@ public class JTextFieldHintUI extends BasicTextFieldUI implements FocusListener 
             g.drawString(hint, inset, component.getHeight() - padding - inset);
         }
     }
+
 
     @Override
     public void focusGained(FocusEvent e) {
