@@ -41,6 +41,9 @@ public class Employee implements Serializable, Comparable<Employee> {
     public Time getBonusTime() {
         return bonusTime;
     }
+    public void setBonusTime(Time bonusTime) {
+        this.bonusTime = bonusTime;
+    }
     @Override
     public String toString(){
         return this.name + " " + this.firstname;

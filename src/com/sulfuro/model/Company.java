@@ -40,6 +40,14 @@ public class Company implements Serializable {
         }
         return employeeDataTable;
     }
+    public CheckInOutCompanyDATA getEmployeeLastWordkingDATA(Employee employee, CheckInOutCompanyDATATable dataTable){
+        for(CheckInOutCompanyDATA data: dataTable.getTable()){
+            if(data.getEmployee().getId() == employee.getId() && employee.getIsWorking()){
+                return data;
+            }
+        }
+        return null;
+    }
     public Employee getEmployeeByID(int ID){
         for(Employee employee: this.getCompany()){
             if(employee.getId() == ID){

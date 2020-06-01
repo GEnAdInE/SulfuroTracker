@@ -117,6 +117,15 @@ public class TrackerServ implements Runnable{
                 e.printStackTrace();
             }
             if(translated != null){
+                translated.getEmployee().setWorking(!translated.getEmployee().getIsWorking());
+                Time supposedWorkingTime = Time.Substraction(translated.getEmployee().getEndTime(), translated.getEmployee().getStartTime());
+                if(!translated.getEmployee().getIsWorking()){
+                    CheckInOutCompanyDATATable dataTable = IOmanager.getCompanyDataFromFile(InputsFilename);
+                    CheckInOutCompanyDATA LastTimeWorking = company.getEmployeeLastWordkingDATA(translated.getEmployee(), dataTable);
+                    Time workedTime = Time.Substraction(translated.getData().getTime(), LastTimeWorking.getData().getTime());
+                    Time bonusTime = Time.Substraction(workedTime, supposedWorkingTime);
+                    translated.getEmployee().setBonusTime(translated.getEmployee().getBonusTime() + bonusTime);
+                }
                 IOmanager.writeCompanyDataToFile(InputsFilename,translated);
                 TrackerInputInsertData(translated);
             }
@@ -227,7 +236,7 @@ public class TrackerServ implements Runnable{
                 CheckInOutCompanyDATATable employeeDataTable = company.getEmployeeDataTable(employee, dataTable);
                 TrackerVisualizeEmployeeInit();
                 for(CheckInOutCompanyDATA data: employeeDataTable.getTable()){
-                    TrackerEmployeeVisualizeAddData(data);
+                    TrackerEmployeeVisualizeInsertData(data);
                 }
                 JOptionPane.showMessageDialog(MainPanel, new JScrollPane(TrackerEmployeesVisualize));
             }
@@ -291,7 +300,7 @@ public class TrackerServ implements Runnable{
         TrackerEmployeesVisualize.setFillsViewportHeight(true);
         serverGUI.getTabs().setComponentAt(0, scrollPane);
     }
-    public void TrackerEmployeeVisualizeAddData(CheckInOutCompanyDATA received){
+    public void TrackerEmployeeVisualizeInsertData(CheckInOutCompanyDATA received){
 
         DefaultTableModel model = (DefaultTableModel) TrackerEmployeesVisualize.getModel();
 
@@ -322,7 +331,7 @@ public class TrackerServ implements Runnable{
 
         String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
 
-        model.addRow(new Object[]{idData, name, timeData, Time.TimeToString(bonustime),dep.getName(),working});
+        model.insertRow(0, new Object[]{idData, name, timeData, Time.TimeToString(bonustime),dep.getName(),working});
 
     }
     ActionListener validButtonAction = new ActionListener() {
