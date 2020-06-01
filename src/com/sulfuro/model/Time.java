@@ -137,6 +137,13 @@ public class Time implements Serializable {
         return result;
     }
 
+    public static Time Addition(Time t0,Time t1)
+    {
+        Time result = new Time();
+        result.getCalendar().setTimeInMillis(t0.getCalendar().getTimeInMillis() + t1.getCalendar().getTimeInMillis());
+        return result;
+    }
+
     public int getDay()
     {
         return calendar.get(Calendar.DAY_OF_MONTH);

@@ -124,7 +124,7 @@ public class TrackerServ implements Runnable{
                     CheckInOutCompanyDATA LastTimeWorking = company.getEmployeeLastWordkingDATA(translated.getEmployee(), dataTable);
                     Time workedTime = Time.Substraction(translated.getData().getTime(), LastTimeWorking.getData().getTime());
                     Time bonusTime = Time.Substraction(workedTime, supposedWorkingTime);
-                    translated.getEmployee().setBonusTime(translated.getEmployee().getBonusTime() + bonusTime);
+                    translated.getEmployee().setBonusTime(Time.Addition(translated.getEmployee().getBonusTime(),bonusTime));
                 }
                 IOmanager.writeCompanyDataToFile(InputsFilename,translated);
                 TrackerInputInsertData(translated);
