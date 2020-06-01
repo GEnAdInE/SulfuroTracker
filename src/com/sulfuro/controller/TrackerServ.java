@@ -2,6 +2,7 @@ package com.sulfuro.controller;
 
 import com.sulfuro.model.*;
 import com.sulfuro.view.TrackerServGUI;
+import com.sulfuro.view.TrackerServUserInfoGUI;
 
 import javax.swing.*;
 import javax.swing.event.PopupMenuEvent;
@@ -250,7 +251,10 @@ public class TrackerServ implements Runnable{
                 for(CheckInOutCompanyDATA data: employeeDataTable.getTable()){
                     TrackerEmployeeVisualizeInsertData(data);
                 }
-                JOptionPane.showMessageDialog(MainPanel, new JScrollPane(TrackerEmployeesVisualize));
+                TrackerServUserInfoGUI userInfoGUI = new TrackerServUserInfoGUI();
+                TrackerServInfo userInfoController = new TrackerServInfo(userInfoGUI,employee,company,TrackerEmployeesVisualize);
+                userInfoController.updateView();
+
             }
         });
         popupMenu.add(visualize);
