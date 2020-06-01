@@ -42,7 +42,7 @@ public class Company implements Serializable {
     }
     public CheckInOutCompanyDATA getEmployeeLastWordkingDATA(Employee employee, CheckInOutCompanyDATATable dataTable){
         for(CheckInOutCompanyDATA data: dataTable.getTable()){
-            if(data.getEmployee().getId() == employee.getId() && employee.getIsWorking()){
+            if((data.getEmployee().getId() == employee.getId()) && (data.getEmployee().getIsWorking())){
                 return data;
             }
         }

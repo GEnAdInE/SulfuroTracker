@@ -1,6 +1,7 @@
 package com.sulfuro.model;
 
 import java.io.Serializable;
+import java.security.PublicKey;
 
 public class Employee implements Serializable, Comparable<Employee> {
     private int id;
@@ -22,14 +23,25 @@ public class Employee implements Serializable, Comparable<Employee> {
         this.depId = depId;
         this.isWorking = false;
     }
+    public Employee(Employee employee){
+        this.id = employee.getId();
+        this.name = employee.getName();
+        this.firstname = employee.getFirstname();
+        this.startTime = employee.getStartTime();
+        this.endTime = employee.getEndTime();
+        this.bonusTime = employee.getBonusTime();
+        this.depId = employee.getDepId();
+        this.isWorking = employee.getIsWorking();
+    }
     public int getDepId()
     {
         return depId;
     }
-
     public int getId() {
         return id;
     }
+    public String getName() { return  name; }
+    public String getFirstname() { return  firstname; }
     public Time getStartTime()
     {
         return startTime;

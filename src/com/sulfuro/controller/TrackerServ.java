@@ -117,16 +117,28 @@ public class TrackerServ implements Runnable{
                 e.printStackTrace();
             }
             if(translated != null){
+                Employee oldTranslated = new Employee(translated.getEmployee());
                 translated.getEmployee().setWorking(!translated.getEmployee().getIsWorking());
                 Time supposedWorkingTime = Time.Substraction(translated.getEmployee().getEndTime(), translated.getEmployee().getStartTime());
+                System.out.println(Time.TimeToString(supposedWorkingTime));
                 if(!translated.getEmployee().getIsWorking()){
                     CheckInOutCompanyDATATable dataTable = IOmanager.getCompanyDataFromFile(InputsFilename);
-                    CheckInOutCompanyDATA LastTimeWorking = company.getEmployeeLastWordkingDATA(translated.getEmployee(), dataTable);
-                    Time workedTime = Time.Substraction(translated.getData().getTime(), LastTimeWorking.getData().getTime());
+                    Time LastTimeWorking = company.getEmployeeLastWordkingDATA(translated.getEmployee(), dataTable).getData().getTime();
+                    Time ActualTime = translated.getData().getTime();
+                    Time workedTime = Time.Substraction(ActualTime, LastTimeWorking);
+                    System.out.println("LST : " + Time.TimeToString(LastTimeWorking));
+                    System.out.println("ACT : " + Time.TimeToString(ActualTime));
+                    System.out.println("WRK : " + Time.TimeToString(workedTime));
                     Time bonusTime = Time.Substraction(workedTime, supposedWorkingTime);
+                    System.out.println("BNS : " + Time.TimeToString(bonusTime));
                     translated.getEmployee().setBonusTime(Time.Addition(translated.getEmployee().getBonusTime(),bonusTime));
                 }
                 IOmanager.writeCompanyDataToFile(InputsFilename,translated);
+                try {
+                    IOmanager.modifyCompanyToFile(CompanyFilename, oldTranslated, translated.getEmployee());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 TrackerInputInsertData(translated);
             }
         }
@@ -430,7 +442,7 @@ public class TrackerServ implements Runnable{
             if(oldID != -1 && id != -1 && firstName != null && lastName != null && startTime != null && endTime != null){
                 Employee translated = company.getEmployeeByID(oldID);
                 if(translated != null){
-                    Employee modifiedTranslated = new Employee(id, firstName, lastName, startTime, endTime,dep.getId());
+                    Employee modifiedTranslated = new Employee(id, firstName, lastName, startTime, endTime, dep.getId());
                     try {
                         IOmanager.modifyCompanyToFile(CompanyFilename, translated, modifiedTranslated);
                         TrackerEmployeeDelData(translated);
