@@ -11,6 +11,7 @@ import java.util.GregorianCalendar;
  */
 public class Time implements Serializable {
     private Calendar calendar;
+    private Boolean negativeTime;
 
 
     /**
@@ -19,12 +20,14 @@ public class Time implements Serializable {
     public Time()
     {
         calendar = new GregorianCalendar();
+        negativeTime = false;
     }
     public Time(int h,int m)
     {
         calendar = new GregorianCalendar();
         calendar.set(Calendar.HOUR_OF_DAY,h);
         calendar.set(Calendar.MINUTE,m);
+        negativeTime = false;
     }
 
     public void emptyTime()
@@ -145,17 +148,33 @@ public class Time implements Serializable {
     {
         Time result = new Time();
         result.emptyTime();
+        int day = result.getDay();
+        long debug = result.getCalendar().getTimeInMillis();
+        result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()-t1.getHour());
+        result.getCalendar().add(Calendar.MINUTE,t0.getMinute()-t1.getMinute());
 
-        result.getCalendar().add(Calendar.MILLISECOND,(int)(t0.getCalendar().getTimeInMillis() - t1.getCalendar().getTimeInMillis()));
+        if(day != result.getDay())
+        {
+            long test = debug-result.getCalendar().getTimeInMillis();
+            result.emptyTime();
+            result.getCalendar().setTimeInMillis(test);
+            result.getCalendar().add(Calendar.HOUR_OF_DAY,-1);
+            result.negativeTime = true;
+        }
+
         return result;
     }
+
 
     public static Time Addition(Time t0,Time t1)
     {
         Time result = new Time();
         result.emptyTime();
+
+
         result.getCalendar().add(Calendar.HOUR_OF_DAY,t0.getHour()+t1.getHour());
         result.getCalendar().add(Calendar.MINUTE,t0.getMinute()+t1.getMinute());
+
 
         return result;
     }
@@ -188,4 +207,7 @@ public class Time implements Serializable {
         return calendar;
     }
 
+    public Boolean getNegativeTime() {
+        return negativeTime;
+    }
 }
