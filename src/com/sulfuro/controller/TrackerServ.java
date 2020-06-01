@@ -125,12 +125,7 @@ public class TrackerServ implements Runnable{
                     Time LastTimeWorking = company.getEmployeeLastWordkingDATA(translated.getEmployee(), dataTable).getData().getTime();
                     Time ActualTime = translated.getData().getTime();
                     Time workedTime = Time.Substraction(ActualTime, LastTimeWorking);
-                    System.out.println("LST : " + Time.TimeToString(LastTimeWorking));
-                    System.out.println("ACT : " + Time.TimeToString(ActualTime));
-                    System.out.println("WRK : " + Time.TimeToString(workedTime));
-                    System.out.println("SWK : " + Time.TimeToString(supposedWorkingTime));
                     Time bonusTime = Time.Substraction(workedTime, supposedWorkingTime);
-                    System.out.println("BNS : " + Time.TimeToString(bonusTime));
                     translated.getEmployee().setBonusTime(Time.Addition(translated.getEmployee().getBonusTime(),bonusTime));
                 }
                 IOmanager.writeCompanyDataToFile(InputsFilename,translated);
@@ -338,12 +333,12 @@ public class TrackerServ implements Runnable{
         int minute = received.getData().getTime().getMinute();
 
         Department dep = company.getDep().get(received.getEmployee().getDepId());
-        Time bonustime = received.getEmployee().getBonusTime();
+        Time bonusTime = received.getEmployee().getBonusTime();
 
 
         String timeData = Integer.toString(year) + "-" + Integer.toString(month) + "-" + Integer.toString(day) + " " + Integer.toString(hour) + ":" + Integer.toString(minute);
 
-        model.insertRow(0, new Object[]{idData, name, timeData, Time.TimeToString(bonustime),dep.getName(),working});
+        model.insertRow(0, new Object[]{idData, name, timeData, Time.TimeToString(bonusTime),dep.getName(),working});
 
     }
     ActionListener validButtonAction = new ActionListener() {

@@ -109,6 +109,9 @@ public class Time implements Serializable {
     static public String TimeToString(Time t)
     {
         StringBuilder str = new StringBuilder();
+        if(t.isNegativeTime()){
+            str.append("-");
+        }
         if(t.getHour()<10)
             str.append("0");
         str.append(t.getHour()).append(':');
@@ -207,7 +210,7 @@ public class Time implements Serializable {
         return calendar;
     }
 
-    public Boolean getNegativeTime() {
+    public Boolean isNegativeTime() {
         return negativeTime;
     }
 }
