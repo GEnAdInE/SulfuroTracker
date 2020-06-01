@@ -22,7 +22,7 @@ public class TrackerServUserInfoGUI extends JFrame {
     {
         super("User Information");
 
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         this.setContentPane(MainPanel);
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         this.setSize(500, 500);
