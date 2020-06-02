@@ -56,7 +56,7 @@ public class Time implements Serializable {
      */
     public String getDate()
     {
-        String strMonth = new SimpleDateFormat("MMM", Locale.US).format(calendar.get(Calendar.MONTH));
+        String strMonth = new SimpleDateFormat("MMMM", Locale.US).format(calendar.getTime());
         String prefix;
         switch (calendar.get(Calendar.DAY_OF_MONTH))
         {
