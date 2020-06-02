@@ -7,6 +7,9 @@ import com.sulfuro.view.TrackerServUserInfoGUI;
 
 import javax.swing.*;
 
+/**
+ * Worker info GUI controller
+ */
 public class TrackerServInfo {
 
     private TrackerServUserInfoGUI view;
@@ -15,6 +18,13 @@ public class TrackerServInfo {
     private JTable tab;
 
 
+    /**
+     * Constructor of the controller
+     * @param v the GUI
+     * @param emp the Employe to get info from
+     * @param comp the company of the Employe
+     * @param table a table of all the checkIn/Out of the worker
+     */
     public TrackerServInfo(TrackerServUserInfoGUI v , Employee emp , Company comp, JTable table)
     {
         view = v;
@@ -23,6 +33,9 @@ public class TrackerServInfo {
         tab = table;
     }
 
+    /**
+     * Update the view of the gui
+     */
     public void updateView()
     {
         view.getId().setText(Integer.toString(employee.getId()));

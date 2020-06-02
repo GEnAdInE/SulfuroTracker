@@ -23,7 +23,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-
+/**
+ * Server controller (where all the magic happen )
+ */
 public class TrackerServ implements Runnable{
 
     private volatile ServerSocket server;
@@ -39,6 +41,11 @@ public class TrackerServ implements Runnable{
     private volatile String CompanyFilename;
     private volatile Company company;
 
+    /**
+     * Server constructor
+     * @param GUI the gui of the server
+     * @throws Exception catch any excpetion that can be generated
+     */
     public TrackerServ(TrackerServGUI GUI) throws Exception {
         port = 1700;
         serverGUI = GUI;
@@ -82,12 +89,21 @@ public class TrackerServ implements Runnable{
 
         running = true;
     }
+
+    /**
+     * End of the thread
+     * @throws Exception if error
+     */
     public void terminate() throws Exception{
         if(socket != null){
             socket.close();
         }
         running = false;
     }
+
+    /**
+     * Main thread function
+     */
     public void run()
     {
         while(running){
@@ -115,7 +131,8 @@ public class TrackerServ implements Runnable{
             try {
                 translated = new CheckInOutCompanyDATA(received, company);
             } catch (Exception e) {
-                e.printStackTrace();
+                JOptionPane.showMessageDialog(serverGUI, "Ah bad ID has been inputed", "Error", JOptionPane.ERROR_MESSAGE);
+                //e.printStackTrace();
             }
             if(translated != null){
                 Employee oldTranslated = new Employee(translated.getEmployee());
@@ -151,6 +168,10 @@ public class TrackerServ implements Runnable{
             }
         }
     }
+
+    /**
+     * Init the jtable for all the CheckIn/Out
+     */
     public void TrackerInputsInit(){
         DefaultTableModel tableModel = new DefaultTableModel(){
             @Override
@@ -168,6 +189,11 @@ public class TrackerServ implements Runnable{
         TrackerInputs.setFillsViewportHeight(true);
         serverGUI.getTabs().setComponentAt(0, scrollPane);
     }
+
+    /**
+     * Add data to the Jtable of all the checkin/out
+     * @param received
+     */
     public void TrackerInputAddData(CheckInOutCompanyDATA received){
 
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
@@ -186,6 +212,8 @@ public class TrackerServ implements Runnable{
         model.addRow(new Object[]{idData, name, timeData});
 
     }
+
+
     public void TrackerInputInsertData(CheckInOutCompanyDATA received){
 
         DefaultTableModel model = (DefaultTableModel) TrackerInputs.getModel();
@@ -205,12 +233,17 @@ public class TrackerServ implements Runnable{
 
     }
 
+
     public void TrackerInputSetDBData(CheckInOutCompanyDATATable dataTable){
         List<CheckInOutCompanyDATA> dataList = dataTable.getTable();
         for (CheckInOutCompanyDATA data: dataList){
             TrackerInputAddData(data);
         }
     }
+
+    /**
+     * Init the Employee Tab
+     */
     public void TrackerEmployeeInit(){
         DefaultTableModel tableModel = new DefaultTableModel(){
             @Override
@@ -227,6 +260,10 @@ public class TrackerServ implements Runnable{
         final JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.addPopupMenuListener(new PopupMenuListener() {
 
+            /**
+             * generate a popuMenu
+             * @param e
+             */
             @Override
             public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
                 SwingUtilities.invokeLater(new Runnable() {
@@ -247,6 +284,10 @@ public class TrackerServ implements Runnable{
 
         JMenuItem visualize = new JMenuItem("More infos");
         visualize.addActionListener(new ActionListener() {
+
+            /**
+             * Get the info of the employe the user right clicked on and display in a new Gui all the info of this worker
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = TrackerEmployees.getSelectedRow();
@@ -271,6 +312,11 @@ public class TrackerServ implements Runnable{
         TrackerEmployees.setFillsViewportHeight(true);
         serverGUI.getEmployeeTabs().setComponentAt(0, scrollPane);
     }
+
+    /**
+     * Add an employee
+     * @param employee employee object to be added
+     */
     public void TrackerEmployeeAddData(Employee employee){
 
         DefaultTableModel model = (DefaultTableModel) TrackerEmployees.getModel();
@@ -284,6 +330,11 @@ public class TrackerServ implements Runnable{
         model.addRow(new Object[]{idData, name,dep});
 
     }
+
+    /**
+     * Delete an employee
+     * @param employee employee to be deleted
+     */
     public void TrackerEmployeeDelData(Employee employee){
 
         DefaultTableModel model = (DefaultTableModel) TrackerEmployees.getModel();
@@ -298,12 +349,18 @@ public class TrackerServ implements Runnable{
             }
         }
     }
+
+
     public void TrackerEmployeeSetDBData(Company company){
         List<Employee> employeeList = company.getCompany();
         for (Employee employee: employeeList){
             TrackerEmployeeAddData(employee);
         }
     }
+
+    /**
+     * Visiualize employe info initializer
+     */
     public void TrackerVisualizeEmployeeInit(){
         DefaultTableModel tableModel = new DefaultTableModel(){
             @Override
@@ -315,14 +372,18 @@ public class TrackerServ implements Runnable{
         tableModel.addColumn("NOM-PRENOM");
         tableModel.addColumn("HEURE");
         tableModel.addColumn("BONUS TIME");
-        tableModel.addColumn("DEPARTMENT");
-        tableModel.addColumn("ISWORKING");
+
 
         TrackerEmployeesVisualize=new JTable(tableModel);
         JScrollPane scrollPane = new JScrollPane(TrackerEmployeesVisualize);
         TrackerEmployeesVisualize.setFillsViewportHeight(true);
         serverGUI.getTabs().setComponentAt(0, scrollPane);
     }
+
+    /**
+     * Insert data to the visualization
+     * @param received
+     */
     public void TrackerEmployeeVisualizeInsertData(CheckInOutCompanyDATA received){
 
         DefaultTableModel model = (DefaultTableModel) TrackerEmployeesVisualize.getModel();
@@ -357,7 +418,12 @@ public class TrackerServ implements Runnable{
         model.insertRow(0, new Object[]{idData, name, timeData, Time.TimeToString(bonusTime),dep.getName(),working});
 
     }
+
     ActionListener validButtonAction = new ActionListener() {
+        /**
+         * Action performed when the user change the port and press validate
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if (!serverGUI.getTextPort().getText().isEmpty()) {
@@ -385,6 +451,10 @@ public class TrackerServ implements Runnable{
 
     ActionListener addButtonAction = new ActionListener() {
 
+        /**
+         * Action performed to add an User
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             int id = -1;
@@ -426,6 +496,10 @@ public class TrackerServ implements Runnable{
 
     final ActionListener modifyButtonAction = new ActionListener() {
 
+        /**
+         * Action performed to modify a user
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             int oldID = -1;
@@ -473,6 +547,10 @@ public class TrackerServ implements Runnable{
 
     ActionListener deleteButtonAction = new ActionListener() {
 
+        /**
+         * Action performed to delete a user
+         * @param e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
 

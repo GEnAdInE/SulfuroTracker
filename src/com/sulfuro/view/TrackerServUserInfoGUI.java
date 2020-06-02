@@ -6,6 +6,9 @@ import com.sulfuro.model.JTextFieldHintUI;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * TrackServer GUI with his constructor and all the getter and setter
+ */
 public class TrackerServUserInfoGUI extends JFrame {
     private JLabel id;
     private JLabel firstname;
@@ -18,6 +21,9 @@ public class TrackerServUserInfoGUI extends JFrame {
     private JPanel MainPanel;
     private JScrollPane CheckInOut;
 
+    /**
+     * UserInfoGUI constructor
+     */
     public TrackerServUserInfoGUI()
     {
         super("User Information");
@@ -25,6 +31,8 @@ public class TrackerServUserInfoGUI extends JFrame {
         MainPanel.setBorder(BorderFactory.createEmptyBorder(5,5,5,5));
         this.setSize(500, 500);
     }
+
+
 
 
     public JLabel getId() {
@@ -58,7 +66,6 @@ public class TrackerServUserInfoGUI extends JFrame {
     public JLabel getIsworking() {
         return isworking;
     }
-
 
     public JScrollPane getCheckInOut() {
         return CheckInOut;

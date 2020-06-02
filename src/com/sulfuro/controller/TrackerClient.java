@@ -121,7 +121,7 @@ public class TrackerClient {
         @Override
         public void actionPerformed(ActionEvent e) {
             JOptionPane settingsWindow = new JOptionPane();
-            String value = JOptionPane.showInputDialog(view, "Enter the IP and the port");
+            String value = JOptionPane.showInputDialog(view, "Enter the IP and the port (Use default 127.0.0.1:1700)");
 
             try {
                 URI uri = new URI("my://" + value);
@@ -181,12 +181,10 @@ public class TrackerClient {
                 socket.close();
             }
             else {
-                JOptionPane errorPane = new JOptionPane();
                 JOptionPane.showMessageDialog(view, "Please check your settings", "Error in settings", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } catch (Exception ex) {
-            JOptionPane errorPane = new JOptionPane();
             JOptionPane.showMessageDialog(view, ex, "Error", JOptionPane.ERROR_MESSAGE);
             return false;
         }

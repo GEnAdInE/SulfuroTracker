@@ -313,9 +313,18 @@ public class Time implements Serializable {
         return calendar;
     }
 
+    /**
+     * getter to know if the time is negativ or not
+     * @return true for a negativ time and false if positiv
+     */
     public Boolean getNegativeTime() {
         return negativeTime;
     }
+
+    /**
+     * Setter for setting negative time or not (must be use carefully)
+     * @param bool true for negativ and false for positiv
+     */
     public void setNegativeTime(boolean bool) {
         this.negativeTime = bool;
     }

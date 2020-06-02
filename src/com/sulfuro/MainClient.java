@@ -5,7 +5,12 @@ import com.sulfuro.model.Time;
 import com.sulfuro.view.TrackerGUI;
 
 public class MainClient {
-    public static void main(String[] args) throws Exception {
+
+    /**
+     * Main client function
+     * @param args not used here
+     */
+    public static void main(String[] args){
 
         TrackerGUI frame = new TrackerGUI("Tracker");
         TrackerClient controllerClient = new TrackerClient(frame);

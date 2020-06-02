@@ -5,6 +5,11 @@ import com.sulfuro.view.TrackerServGUI;
 
 public class MainServer {
 
+    /**
+     * Main server function
+     * @param args not used here
+     * @throws Exception catch all exception than can happend on the server
+     */
     public static void main(String[] args) throws Exception {
 
         TrackerServGUI serverGUI = new TrackerServGUI("Tracker Server");

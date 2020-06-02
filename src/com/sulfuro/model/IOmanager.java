@@ -174,6 +174,12 @@ public class IOmanager {
         }
     }
 
+    /**
+     * Delete an employee from the company
+     * @param filename file to edit
+     * @param employee employee to delete
+     * @throws Exception if an error happend
+     */
     public static void delCompanyToFile(String filename,Employee employee) throws Exception {
         Company companyTable;
         try

@@ -5,6 +5,10 @@ import com.sulfuro.model.JTextFieldHintUI;
 import javax.swing.*;
 import java.awt.*;
 
+
+/**
+ * TrackServGUI with is constructor and all getter and setter
+ */
 public class TrackerServGUI extends JFrame {
     private JTabbedPane Tabs;
     private JTabbedPane EmployeeTabs;
@@ -32,6 +36,10 @@ public class TrackerServGUI extends JFrame {
     private JTable TrackerInputs;
     private JTable TrackerEmployees;
 
+    /**
+     * TrackerServerGUI constructor
+     * @param title title of the windows
+     */
     public TrackerServGUI(String title)
     {
         super(title);

@@ -5,6 +5,9 @@ import com.sulfuro.model.JTextFieldHintUI;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Tracker Client gui with his constructor and all the getter and setter
+ */
 public class TrackerGUI extends JFrame{
     private JPanel MainPanel;
     private JTextField userIdText;
@@ -19,7 +22,10 @@ public class TrackerGUI extends JFrame{
     private JPanel settingPanel;
 
 
-
+    /**
+     * TrackerGui constructor
+     * @param title title of the windows
+     */
     public TrackerGUI(String title)
     {
         super(title);
