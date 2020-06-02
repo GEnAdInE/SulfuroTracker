@@ -174,6 +174,31 @@ public class IOmanager {
         }
     }
 
+    public static void delCompanyToFile(String filename,Employee employee) throws Exception {
+        Company companyTable;
+        try
+        {
+            companyTable = IOmanager.getCompanyFromFile(filename);
+            companyTable.removeEmployee(employee);
+
+
+            Collections.sort(companyTable.getCompany());
+
+            FileOutputStream file = new FileOutputStream(filename);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+
+            out.writeObject(companyTable);
+
+            out.close();
+            file.close();
+            System.out.println("WROTE C");
+        }
+
+        catch(IOException ex) {
+            System.out.println("Writing IOException is caught");
+        }
+    }
+
 
     /**
      * Get companyData from a file

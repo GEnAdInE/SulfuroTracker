@@ -408,7 +408,7 @@ public class TrackerServ implements Runnable{
             else {
                 JOptionPane.showMessageDialog(serverGUI, "Id or Firstname or Lastname or Start time or End time can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            if(id != -1 && firstName != null && lastName != null && startTime != null && endTime != null){
+            if(id >= 0 && firstName != null && lastName != null && startTime != null && endTime != null){
                 Employee translated = new Employee(id, lastName, firstName, startTime, endTime,dep.getId());
                 try {
                     IOmanager.writeCompanyToFile(CompanyFilename, translated);
@@ -417,12 +417,14 @@ public class TrackerServ implements Runnable{
                 } catch (Exception exception) {
                     exception.printStackTrace();
                 }
+                JOptionPane.showMessageDialog(serverGUI, "User of id :" + id + "has been added ", "Information", JOptionPane.INFORMATION_MESSAGE);
+
             }
         }
     };
 
 
-    ActionListener modifyButtonAction = new ActionListener() {
+    final ActionListener modifyButtonAction = new ActionListener() {
 
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -434,24 +436,22 @@ public class TrackerServ implements Runnable{
             Time endTime = null;
             Department dep = null;
 
-            if(!serverGUI.getOldIDModifyTextField().getText().isEmpty() || !serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty())
-            {
+            if (!serverGUI.getOldIDModifyTextField().getText().isEmpty() || !serverGUI.getIdModifyTextfield().getText().isEmpty() || !serverGUI.getFirstnameModifyTextfield().getText().isEmpty() || !serverGUI.getLastnameModifyTextField().getText().isEmpty() || !serverGUI.getStartTimeModifyTextfield().getText().isEmpty() || !serverGUI.getEndTimeModifyTextfield().getText().isEmpty()) {
                 oldID = Integer.parseInt(serverGUI.getOldIDModifyTextField().getText());
                 id = Integer.parseInt(serverGUI.getIdModifyTextfield().getText());
                 firstName = serverGUI.getFirstnameModifyTextfield().getText();
                 lastName = serverGUI.getLastnameModifyTextField().getText();
                 LocalTime lts = LocalTime.parse(serverGUI.getStartTimeModifyTextfield().getText());
                 LocalTime lte = LocalTime.parse(serverGUI.getEndTimeModifyTextfield().getText());
-                startTime= new Time(lts.getHour(),lts.getMinute());
-                endTime = new Time(lte.getHour(),lte.getMinute());
-                dep = (Department)serverGUI.getComboBoxModify().getSelectedItem();
-            }
-            else {
+                startTime = new Time(lts.getHour(), lts.getMinute());
+                endTime = new Time(lte.getHour(), lte.getMinute());
+                dep = (Department) serverGUI.getComboBoxModify().getSelectedItem();
+            } else {
                 JOptionPane.showMessageDialog(serverGUI, "Old ID or New ID or Firstname or Lastname or Start time or End time can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
-            if(oldID != -1 && id != -1 && firstName != null && lastName != null && startTime != null && endTime != null){
+            if ((oldID >= 0) && (id >= 0) && (firstName != null) && (lastName != null) && (startTime != null) && (endTime != null)) {
                 Employee translated = company.getEmployeeByID(oldID);
-                if(translated != null){
+                if (translated != null) {
                     Employee modifiedTranslated = new Employee(id, firstName, lastName, startTime, endTime, dep.getId());
                     try {
                         IOmanager.modifyCompanyToFile(CompanyFilename, translated, modifiedTranslated);
@@ -461,8 +461,12 @@ public class TrackerServ implements Runnable{
                     } catch (Exception exception) {
                         exception.printStackTrace();
                     }
+                    JOptionPane.showMessageDialog(serverGUI, "User of id :" + id + "has been modified ", "Information", JOptionPane.INFORMATION_MESSAGE);
 
                 }
+            } else {
+                JOptionPane.showMessageDialog(serverGUI, "Old ID or New ID or Firstname or Lastname or Start time or End time can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
+
             }
         }
     };
@@ -475,12 +479,19 @@ public class TrackerServ implements Runnable{
             if(!serverGUI.getIdDeleteTextfield().getText().isEmpty())
             {
                 int ID = Integer.parseInt(serverGUI.getIdDeleteTextfield().getText());
+                Employee tobedel = company.getEmployeeByID(ID);
+                try {
+                    IOmanager.delCompanyToFile(CompanyFilename, tobedel);
+                    TrackerEmployeeDelData(tobedel);
+                    company = IOmanager.getCompanyFromFile(CompanyFilename);
+                } catch (Exception exception) {
+                    exception.printStackTrace();
+                }
+                JOptionPane.showMessageDialog(serverGUI, "User of id :" + ID + "has been deleted ", "Information", JOptionPane.INFORMATION_MESSAGE);
             } else {
                 JOptionPane.showMessageDialog(serverGUI, "Id can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
             }
 
-
-            //ACTION A FAIRE SUR LE BOUTTON
         }
     };
 

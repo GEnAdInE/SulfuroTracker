@@ -10,10 +10,8 @@ public class MainServer {
         TrackerServGUI serverGUI = new TrackerServGUI("Tracker Server");
         serverGUI.setVisible(true);
 
-
         TrackerServ server = new TrackerServ(serverGUI);
         Thread receptionThread = new Thread(server);
         receptionThread.start();
-
     }
 }
