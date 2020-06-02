@@ -316,4 +316,7 @@ public class Time implements Serializable {
     public Boolean getNegativeTime() {
         return negativeTime;
     }
+    public void setNegativeTime(boolean bool) {
+        this.negativeTime = bool;
+    }
 }

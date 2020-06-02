@@ -124,10 +124,22 @@ public class TrackerServ implements Runnable{
                 if(!translated.getEmployee().getIsWorking()){
                     CheckInOutCompanyDATATable dataTable = IOmanager.getCompanyDataFromFile(InputsFilename);
                     Time LastTimeWorking = company.getEmployeeLastWordkingDATA(translated.getEmployee(), dataTable).getData().getTime();
+                    CheckInOutCompanyDATA LastNotTimeWorking = company.getEmployeeLastNotWordkingDATA(translated.getEmployee(), dataTable);
                     Time ActualTime = translated.getData().getTime();
                     Time workedTime = Time.Substraction(ActualTime, LastTimeWorking);
-                    Time bonusTime = Time.Substraction(workedTime, supposedWorkingTime);
-                    translated.getEmployee().setBonusTime(Time.Addition(translated.getEmployee().getBonusTime(),bonusTime));
+                    Time bonusTime = null;
+                    if(LastNotTimeWorking != null) {
+                        if(LastNotTimeWorking.getData().getTime().getDay() == ActualTime.getDay()){
+                            bonusTime = Time.Addition(translated.getEmployee().getBonusTime(), workedTime);
+                        } else {
+                            bonusTime = supposedWorkingTime;
+                            bonusTime.setNegativeTime(true);
+                        }
+                    } else {
+                        bonusTime = supposedWorkingTime;
+                        bonusTime.setNegativeTime(true);
+                    }
+                    translated.getEmployee().setBonusTime(bonusTime);
                 }
                 IOmanager.writeCompanyDataToFile(InputsFilename,translated);
                 try {
@@ -366,7 +378,6 @@ public class TrackerServ implements Runnable{
                 }
             } else {
                 JOptionPane.showMessageDialog(serverGUI, "Can't be empty", "Error", JOptionPane.ERROR_MESSAGE);
-
             }
 
         }
